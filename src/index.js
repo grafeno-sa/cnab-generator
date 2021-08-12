@@ -4,9 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const ACQUISITION = "acquisition";
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App fundDocument={"02968340000489"} operationType={ACQUISITION} />
   </React.StrictMode>,
   document.getElementById('root')
 );

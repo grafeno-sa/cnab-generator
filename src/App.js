@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { generate } from 'gerador-validador-cpf'
 import faker from 'faker'
 
@@ -665,6 +665,7 @@ const REPURCHASE_FIELDS = [
 const DEFAULT_HEADER_LINE_TEMPLATE =
   "01REMESSA01COBRANCA       00000002968340000489ATLANTA FUNDO INV EM DIR CRED 611PAULISTA S.A.  280420        MX0000030                                                                                                                                                                                                                                                                    00000000000000                                               000001";
 
+// eslint-disable-next-line no-unused-vars
 const CHARGE_HEADER_LINE_TEMPLATE =
   "02RETORNO01COBRANCA       00000002968340000489ATLANTA FUNDO DE INVESTIMENTO 237BRADESCO       2812200160000002657                                                                                                                                                                                                                                                                          291220         000001";
 

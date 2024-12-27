@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import Field from "./Field"
 import getLineFields from "../scripts/lineFields"
 import ContentEditor from "../scripts/contentEditor"

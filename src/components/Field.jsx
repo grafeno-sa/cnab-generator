@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import doesValueExist from "../scripts/doesValueExist"
 
 const Field = ({ field, setEditedFields }) => {

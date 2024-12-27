@@ -1,4 +1,3 @@
-import React from "react"
 import { Toast } from "../vendors/swal/toast"
 
 import LineGenerationValidator from "../scripts/lineGenerationValidator"
@@ -9,7 +8,6 @@ const LineGenerator = ({ type, quantity, stateHook }) => {
 
   const clickHandler = () => {
     const isValidGeneration = LineGenerationValidator().validate({ generatedLines, type })
-    console.log(isValidGeneration)
     if (!isValidGeneration.valid) {
       Toast.fire({
         icon: "warning",
@@ -27,7 +25,7 @@ const LineGenerator = ({ type, quantity, stateHook }) => {
         const newLine = generateLine({ type, generatedLines: lines })
         newLines.push(newLine)
       }
-      catch (error) {
+      catch () {
         Toast.fire({
           icon: "error",
           title: 'Houve um erro. Favor tentar novamente.'

@@ -1,5 +1,3 @@
-import React from 'react'
-
 const CNABCleaner = ({ setGeneratedLines }) => {
   const clickHandler = () => {
     setGeneratedLines([])

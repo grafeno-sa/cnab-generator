@@ -1,5 +1,3 @@
-import React from "react"
-
 import ContentFormatter from "../scripts/contentFormatter";
 
 const CNABDownloader = ({ generatedLines }) => {

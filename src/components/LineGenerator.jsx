@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Toast } from "../vendors/swal/toast"
 
 import LineGenerationValidator from "../scripts/lineGenerationValidator"
@@ -25,7 +26,8 @@ const LineGenerator = ({ type, quantity, stateHook }) => {
         const newLine = generateLine({ type, generatedLines: lines })
         newLines.push(newLine)
       }
-      catch () {
+      catch (e) {
+        console.error(e)
         Toast.fire({
           icon: "error",
           title: 'Houve um erro. Favor tentar novamente.'
@@ -45,5 +47,14 @@ const LineGenerator = ({ type, quantity, stateHook }) => {
     </button>
   )
 }
+
+LineGenerator.propTypes = {
+  type: PropTypes.string.isRequired,
+  quantity: PropTypes.number.isRequired,
+  stateHook: PropTypes.shape({
+    generatedLines: PropTypes.array.isRequired,
+    setGeneratedLines: PropTypes.func.isRequired,
+  })
+};
 
 export default LineGenerator;

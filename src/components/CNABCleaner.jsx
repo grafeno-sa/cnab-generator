@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 const CNABCleaner = ({ setGeneratedLines }) => {
   const clickHandler = () => {
     setGeneratedLines([])
@@ -11,5 +13,9 @@ const CNABCleaner = ({ setGeneratedLines }) => {
     </button>
   )
 }
+
+CNABCleaner.propTypes = {
+  setGeneratedLines: PropTypes.func.isRequired,
+};
 
 export default CNABCleaner

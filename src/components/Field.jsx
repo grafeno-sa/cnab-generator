@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react"
 import doesValueExist from "../scripts/doesValueExist"
 
@@ -61,5 +62,17 @@ const Field = ({ field, setEditedFields }) => {
     </div>
   )
 }
+
+Field.propTypes = {
+  field: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      defaultValue: PropTypes.func.isRequired,
+      startIndex: PropTypes.number.isRequired,
+      endIndex: PropTypes.number.isRequired,
+      maxLength: PropTypes.number.isRequired,
+    }),
+  setEditedFields: PropTypes.func.isRequired,
+};
 
 export default Field

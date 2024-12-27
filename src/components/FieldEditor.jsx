@@ -1,4 +1,5 @@
 import { useState } from "react"
+import PropTypes from "prop-types";
 import Field from "./Field"
 import getLineFields from "../scripts/lineFields"
 import ContentEditor from "../scripts/contentEditor"
@@ -67,5 +68,10 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
     </>
   )
 }
+
+FieldEditor.propTypes = {
+  generatedLines: PropTypes.array.isRequired,
+  setGeneratedLines: PropTypes.func.isRequired,
+};
 
 export default FieldEditor

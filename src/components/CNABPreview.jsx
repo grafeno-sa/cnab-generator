@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import ContentFormatter from "../scripts/contentFormatter"
 
 import '../styles/components/CNABPreview.css';
@@ -18,5 +19,9 @@ const CNABPreview = ({ generatedLines }) => {
       readOnly/>
   )
 }
+
+CNABPreview.propTypes = {
+  generatedLines: PropTypes.array.isRequired,
+};
 
 export default CNABPreview

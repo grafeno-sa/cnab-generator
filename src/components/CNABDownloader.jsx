@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import ContentFormatter from "../scripts/contentFormatter";
 
 const CNABDownloader = ({ generatedLines }) => {
@@ -24,5 +25,10 @@ const CNABDownloader = ({ generatedLines }) => {
     </button>
   )
 }
+
+
+CNABDownloader.propTypes = {
+  generatedLines: PropTypes.array.isRequired,
+};
 
 export default CNABDownloader

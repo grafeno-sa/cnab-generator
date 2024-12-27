@@ -1,0 +1,113 @@
+:root {
+  --danger-color: #dc3545;
+  --danger-color-darker: #b02a37;
+  --primary-color: #031633;
+  --primary-color-lighter: #052c65;
+  --muted-color-darker: #454545;
+}
+
+.container {
+  margin: 0 auto;
+  width: 90%;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.btn {
+  margin: 15px;
+  padding: 7px 15px;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: whitesmoke;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color-lighter);
+}
+
+.btn-danger {
+  color: whitesmoke;
+  background-color: var(--danger-color);
+}
+
+.btn-danger:hover {
+  background-color: var(--danger-color-darker);
+}
+
+.btn-light:hover {
+  color: whitesmoke;
+  background-color: var(--muted-color-darker)
+}
+
+.mr-1 {
+  margin-right: 5px;
+}
+
+.mr-2 {
+  margin-right: 10px;
+}
+
+.ml-2 {
+  margin-left: 10px;
+}
+
+
+.mr-3 {
+  margin-right: 15px;
+}
+
+.mb-3 {
+  margin-bottom: 15px;
+}
+
+.pb-2 {
+  padding-bottom: 10px;
+}
+
+.pb-3 {
+  padding-bottom: 15px;
+}
+
+.pb-5 {
+  padding-bottom: 25px;
+}
+
+.row {
+  display: flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.flex-end {
+  justify-self: flex-end;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.col-3 {
+  width: 25%;
+}
+
+.col-4 {
+  width: 30%;
+}
+
+.col-12 {
+  width: 100%;
+}
+
+.row input {
+  width: 80%;
+}

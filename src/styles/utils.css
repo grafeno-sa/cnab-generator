@@ -49,6 +49,15 @@
   background-color: var(--muted-color-darker)
 }
 
+.mt-2 {
+  margin-top: 10px;
+}
+
+.mt-3 {
+  margin-top: 15px;
+}
+
+
 .mr-1 {
   margin-right: 5px;
 }
@@ -110,4 +119,10 @@
 
 .row input {
   width: 80%;
+}
+
+.flex-align-center {
+  display: flex;
+  align-self: center;
+  height: fit-content;
 }

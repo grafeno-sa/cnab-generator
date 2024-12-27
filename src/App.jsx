@@ -9,8 +9,6 @@ import FieldEditor from './components/FieldEditor';
 
 function App() {
   const [generatedLines, setGeneratedLines] = useState([])
-  const [wallet, setWallet] = useState('01')
-  
 
   return (
     <div className="container">
@@ -23,7 +21,6 @@ function App() {
               <LineGenerator
                 type='registro1'
                 quantity={quantity}
-                wallet={wallet}
                 stateHook={{generatedLines, setGeneratedLines}}/>
             </div>
         )) }
@@ -37,7 +34,6 @@ function App() {
           <LineGenerator
             type='registro2'
             quantity={1}
-            wallet={wallet}
             stateHook={{generatedLines, setGeneratedLines}}/>
         </div>
         
@@ -45,7 +41,6 @@ function App() {
           <LineGenerator
             type='registro3'
             quantity={1}
-            wallet={wallet}
             stateHook={{generatedLines, setGeneratedLines}}/>
         </div>
 
@@ -53,7 +48,6 @@ function App() {
           <LineGenerator
             type='registro7'
             quantity={1}
-            wallet={wallet}
             stateHook={{generatedLines, setGeneratedLines}}/>
         </div>
       </div>
@@ -69,13 +63,6 @@ function App() {
       <p>
         <span className='mr-3'>
           Total de linhas: {generatedLines.length}
-        </span>
-        <span>
-          <label className='mr-1'>Carteira</label>
-          <input
-            type="text"
-            defaultValue={wallet}
-            onChange={(e) => setWallet(e.target.value)} />
         </span>
       </p>
 

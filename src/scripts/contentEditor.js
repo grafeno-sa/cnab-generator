@@ -26,7 +26,12 @@ const ContentEditor = () => {
     return generatedLines
   }
 
-  return { editAll, editLast }
+  const deleteLast = ({generatedLines}) => {
+    generatedLines.pop()
+    return generatedLines
+  }
+
+  return { editAll, editLast, deleteLast }
 }
 
 export default ContentEditor;

@@ -1,6 +1,7 @@
 import getLineTemplate from "./lineTemplate";
 import getLineFields from "./lineFields";
 import generateLine from "./lineFactory";
+import { replaceSubstring } from "./replaceSubstring";
 
 const ContentFormatter = () => {
   const format = (generatedLines) => {
@@ -29,8 +30,7 @@ const ContentFormatter = () => {
       const valueToFormat = generatedLine[field.name].toString() || ""
       const paddingType = field.paddingType || '0'
       const formattedValue = valueToFormat.padStart(fieldSize, paddingType)
-      const valueToReplace = formattedLine.substring(field.startIndex -1, field.endIndex)
-      return formattedLine.replace(valueToReplace, formattedValue)
+      return replaceSubstring(formattedLine, field.startIndex, field.endIndex, formattedValue)
     }
     catch (error){
       console.error(error)

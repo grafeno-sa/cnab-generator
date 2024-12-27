@@ -1,6 +1,5 @@
 import generateCleanCNPJ from './generateCleanCNPJ';
 import generateFormattedDate from './dateGenerator';
-import ourNumberWithDigit from './ourNumberGenerator';
 
 const getLineFields = (type) => {
   const fields = {
@@ -21,7 +20,7 @@ const TRAILER_FIELDS = [
     description: 'Número sequencial',
     startIndex: 439,
     endIndex: 444,
-    defaultValue: ({ type, generatedLines, wallet }) => generatedLines.length + 2,
+    defaultValue: ({ type, generatedLines }) => generatedLines.length + 2,
     maxLength: 6,
     paddingType: '0'
   }
@@ -51,7 +50,7 @@ const HEADER_FIELDS = [
     description: 'Número sequencial',
     startIndex: 439,
     endIndex: 444,
-    defaultValue: ({ type, generatedLines, wallet }) => 1,
+    defaultValue: () => 1,
     maxLength: 6,
     paddingType: '0'
   }
@@ -90,10 +89,7 @@ const REGISTRO1_FIELDS = [
     description: "Nosso Número do Título",
     startIndex: 71,
     endIndex: 82,    
-    defaultValue: ({ generatedLines, wallet }) => {
-      const number = generateCleanCNPJ().substring(0, 11)
-      return ourNumberWithDigit({ wallet, ourNumber: number })
-    },
+    defaultValue: () => '',
     maxLength: 12,
     paddingType: '0'
   },
@@ -113,6 +109,19 @@ const REGISTRO1_FIELDS = [
     endIndex: 126,
     defaultValue: _ => generateFormattedDate(true),
     maxLength: 6,
+    paddingType: ' ',
+  },
+  {
+    name: "valorTitulo",
+    description: "Valor Título",
+    startIndex: 127,
+    endIndex: 139,
+    defaultValue: _ => {
+      const min = 10
+      const max = 100000
+      return Math.floor(Math.random() * (max - min + 1) + min)
+    },
+    maxLength: 13,
     paddingType: ' ',
   },
   {
@@ -147,7 +156,7 @@ const REGISTRO1_FIELDS = [
     description: 'Número sequencial',
     startIndex: 439,
     endIndex: 444,
-    defaultValue: ({ type, generatedLines, wallet }) => generatedLines.length + 2,
+    defaultValue: ({ type, generatedLines }) => generatedLines.length + 2,
     maxLength: 6,
     paddingType: '0'
   }
@@ -159,7 +168,7 @@ const REGISTRO2_FIELDS =[
     description: 'Mensagem 1',
     startIndex: 2,
     endIndex: 81,
-    defaultValue: _ => '',
+    defaultValue: _ => 'pagador@email.com',
     maxLength: 80,
     paddingType: ' '
   },
@@ -231,7 +240,7 @@ const REGISTRO2_FIELDS =[
     description: 'Número sequencial',
     startIndex: 439,
     endIndex: 444,
-    defaultValue: ({ type, generatedLines, wallet }) => generatedLines.length + 2,
+    defaultValue: ({ type, generatedLines }) => generatedLines.length + 2,
     maxLength: 6,
     paddingType: '0'
   }
@@ -252,7 +261,7 @@ const REGISTRO3_FIELDS = [
     description: "Nosso Número do Título",
     startIndex: 18,
     endIndex: 29,
-    defaultValue: ({generatedLines, wallet}) => {
+    defaultValue: ({ generatedLines }) => {
       const registro1Lines = generatedLines.filter(line => line.type === 'registro1');
       const lastIndex = registro1Lines.length - 1;
       return registro1Lines[lastIndex].ourNumber
@@ -373,7 +382,7 @@ const REGISTRO3_FIELDS = [
     description: 'Número sequencial',
     startIndex: 439,
     endIndex: 444,
-    defaultValue: ({ type, generatedLines, wallet }) => generatedLines.length + 2,
+    defaultValue: ({ generatedLines }) => generatedLines.length + 2,
     maxLength: 6,
     paddingType: '0'
   }
@@ -448,7 +457,7 @@ const REGISTRO7_FIELDS = [
     description: 'Número sequencial',
     startIndex: 439,
     endIndex: 444,
-    defaultValue: ({ type, generatedLines, wallet }) => generatedLines.length + 2,
+    defaultValue: ({ generatedLines }) => generatedLines.length + 2,
     maxLength: 6,
     paddingType: '0'
   }

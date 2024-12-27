@@ -25,26 +25,38 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
     setGeneratedLines(() => [...editedLines])
   }
 
+  const handleEditLastLine = () => {
+    const editedLines = ContentEditor().deleteLast({ generatedLines, editedFields, recordType })
+    setGeneratedLines(() => [...editedLines])
+  }
+
   if (!generatedLines.length) return (<></>)
 
   return (
     <>
-      <select
-        onChange={selectHandler}
-        className="mr-3">
-        {editableTypes.map((t, index) => <option value={t} key={index}>{t}</option>)}
-      </select>
-      <button
-        onClick={handleEditAll}
-        className="btn btn-danger">
-        Editar todos os {recordType}
-      </button>
-      <button
-        onClick={handleEditLast}
-        className="btn btn-danger">
-        Editar o último {recordType}
-      </button>
-      <div className="row">
+      <div className="row mb-3">
+        <select
+          onChange={selectHandler}
+          className="mr-3 flex-align-center">
+          {editableTypes.map((t, index) => <option value={t} key={index}>{t}</option>)}
+        </select>
+        <button
+          onClick={handleEditAll}
+          className="btn btn-danger">
+          Editar todos os {recordType}
+        </button>
+        <button
+          onClick={handleEditLast}
+          className="btn btn-danger">
+          Editar o último {recordType}
+        </button>
+        <button
+          onClick={handleEditLastLine}
+          className="btn btn-danger">
+          Remover a última linha
+        </button>
+      </div>
+      <div className="row mt-3">
         {fieldOptions.map((field) => (
           <Field
             field={field}

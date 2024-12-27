@@ -4,7 +4,7 @@ import { Toast } from "../vendors/swal/toast"
 import LineGenerationValidator from "../scripts/lineGenerationValidator"
 import generateLine from "../scripts/lineFactory"
 
-const LineGenerator = ({ type, quantity, stateHook, wallet }) => {
+const LineGenerator = ({ type, quantity, stateHook }) => {
   const { generatedLines, setGeneratedLines } = stateHook
 
   const clickHandler = () => {
@@ -24,7 +24,7 @@ const LineGenerator = ({ type, quantity, stateHook, wallet }) => {
     for (let i = 1; i <= quantity; i++) {
       try{
         const lines = type === 'registro1' ? [...generatedLines, ...newLines] : generatedLines
-        const newLine = generateLine({ type, generatedLines: lines, wallet })
+        const newLine = generateLine({ type, generatedLines: lines })
         newLines.push(newLine)
       }
       catch (error) {

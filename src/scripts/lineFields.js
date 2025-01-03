@@ -125,6 +125,15 @@ const REGISTRO1_FIELDS = [
     paddingType: ' ',
   },
   {
+    name: "especieTitulo",
+    description: "Espécie Título",
+    startIndex: 148,
+    endIndex: 149,
+    defaultValue: () => '01',
+    maxLength: 2,
+    paddingType: 0,
+  },
+  {
     name: "documentoSacado",                                                                                                   
     description: "CPF/CNPJ do sacado",
     startIndex: 221,

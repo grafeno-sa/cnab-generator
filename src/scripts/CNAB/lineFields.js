@@ -1,5 +1,5 @@
 import generateCleanCNPJ from '../generateCleanCNPJ';
-import generateFormattedDate from './dateGenerator';
+import generateFormattedDate from '../dateGenerator';
 
 const getLineFields = (type) => {
   const fields = {
@@ -107,7 +107,7 @@ const REGISTRO1_FIELDS = [
     description: "Data de vencimento - dd/mm/yyy",
     startIndex: 121,
     endIndex: 126,
-    defaultValue: () => generateFormattedDate(true),
+    defaultValue: () => generateFormattedDate({ future: true }),
     maxLength: 6,
     paddingType: ' ',
   },

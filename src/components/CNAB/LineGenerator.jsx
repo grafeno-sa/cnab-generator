@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import { Toast } from "../../vendors/swal/toast"
 
-import LineGenerationValidator from "../scripts/lineGenerationValidator"
-import generateLine from "../scripts/lineFactory"
+import LineGenerationValidator from "../../scripts/CNAB/lineGenerationValidator"
+import generateLine from "../../scripts/CNAB/lineFactory"
 
 const LineGenerator = ({ type, quantity, stateHook }) => {
   const { generatedLines, setGeneratedLines } = stateHook

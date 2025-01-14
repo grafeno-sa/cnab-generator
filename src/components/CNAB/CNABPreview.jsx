@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import ContentFormatter from "../scripts/CNAB/contentFormatter";
+import ContentFormatter from "../../scripts/CNAB/contentFormatter";
 
-import '../styles/components/CNABPreview.css';
+import '../../styles/components/CNABPreview.css';
 
 const CNABPreview = ({ generatedLines }) => {
   if (generatedLines.length >= 50000) {

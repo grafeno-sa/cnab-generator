@@ -1,4 +1,4 @@
-import generateCleanCNPJ from './generateCleanCNPJ';
+import generateCleanCNPJ from '../generateCleanCNPJ';
 import generateFormattedDate from './dateGenerator';
 
 const getLineFields = (type) => {

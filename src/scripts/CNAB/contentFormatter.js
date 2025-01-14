@@ -1,7 +1,7 @@
 import getLineTemplate from "./lineTemplate";
 import getLineFields from "./lineFields";
 import generateLine from "./lineFactory";
-import { replaceSubstring } from "./replaceSubstring";
+import { replaceSubstring } from "../replaceSubstring";
 
 const ContentFormatter = () => {
   const format = (generatedLines) => {

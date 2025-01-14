@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import ContentFormatter from "../scripts/contentFormatter"
+import ContentFormatter from "../scripts/CNAB/contentFormatter";
 
 import '../styles/components/CNABPreview.css';
 

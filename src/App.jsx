@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import './App.css'
 
-import LineGenerator from './components/LineGenerator';
-import CNABCleaner from './components/CNABCleaner';
-import CNABPreview from './components/CNABPreview';
-import CNABDownloader from './components/CNABDownloader';
-import FieldEditor from './components/FieldEditor';
+import LineGenerator from './components/CNAB/LineGenerator';
+import CNABCleaner from './components/CNAB/CNABCleaner';
+import CNABPreview from './components/CNAB/CNABPreview';
+import CNABDownloader from './components/CNAB/CNABDownloader';
+import FieldEditor from './components/CNAB/FieldEditor';
 
 function App() {
   const [generatedLines, setGeneratedLines] = useState([])

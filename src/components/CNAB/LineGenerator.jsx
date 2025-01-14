@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Toast } from "../vendors/swal/toast"
+import { Toast } from "../../vendors/swal/toast"
 
 import LineGenerationValidator from "../scripts/lineGenerationValidator"
 import generateLine from "../scripts/lineFactory"

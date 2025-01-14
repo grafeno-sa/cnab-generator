@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react"
-import doesValueExist from "../scripts/doesValueExist"
+import doesValueExist from "../../scripts/doesValueExist"
 
 const Field = ({ field, setEditedFields }) => {
   const [currentLength, setCurrentLength] = useState(0)

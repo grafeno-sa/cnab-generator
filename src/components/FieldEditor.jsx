@@ -2,7 +2,7 @@ import { useState } from "react"
 import PropTypes from "prop-types";
 import Field from "./Field"
 import getLineFields from "../scripts/lineFields"
-import ContentEditor from "../scripts/contentEditor"
+import ContentEditor from "../scripts/CNAB/contentEditor"
 
 const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
   const editableTypes = ['registro1', 'registro2', 'registro3', 'registro7']

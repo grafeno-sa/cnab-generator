@@ -5,6 +5,7 @@ import Preview from '../components/Preview';
 import FieldEditor from '../components/CNAB/FieldEditor';
 import ContentFormatter from "../scripts/CNAB/contentFormatter";
 import Downloader from '../components/Downloader';
+import AccordionItem from '../components/Accordeon';
 
 function Cnab() {
   const [generatedLines, setGeneratedLines] = useState([])
@@ -68,9 +69,11 @@ function Cnab() {
       </p>
 
       <div className='pb-5'>
-        <FieldEditor
-          generatedLines={generatedLines}
-          setGeneratedLines={setGeneratedLines}/>
+        <AccordionItem
+          title={'Editar dados'}
+          content={<FieldEditor
+                      generatedLines={generatedLines}
+                      setGeneratedLines={setGeneratedLines}/>} />
       </div>
 
       <Preview

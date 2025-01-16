@@ -31,7 +31,15 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
     setGeneratedLines(() => [...editedLines])
   }
 
-  if (!generatedLines.length) return (<></>)
+  if (!generatedLines.length) {
+    return (
+      <>
+        <p>
+          Adicione dados para editar
+        </p>
+      </>
+    )
+  }
 
   return (
     <>

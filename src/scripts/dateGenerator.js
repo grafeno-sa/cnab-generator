@@ -1,4 +1,4 @@
-const generateFormattedDate = ({ future = false, separator = '' }) => {
+const generateFormattedDate = ({ future = false, separator = '', fullYear = false }) => {
   const currentDate = new Date();
   let targetDate = new Date();
 
@@ -8,8 +8,9 @@ const generateFormattedDate = ({ future = false, separator = '' }) => {
 
   const day = targetDate.getDate().toString().padStart(2, '0');
   const month = (targetDate.getMonth() + 1).toString().padStart(2, '0');
-  const year = targetDate.getFullYear().toString().slice(-2);
-  const formattedDate = day + separator + separator + month + separator + year;
+  let year = targetDate.getFullYear().toString()
+  if (!fullYear) year = year.slice(-2)
+  const formattedDate = day + separator + month + separator + year;
 
   return formattedDate;
 };

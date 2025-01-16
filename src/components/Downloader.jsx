@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
-import ContentFormatter from "../../scripts/CNAB/contentFormatter";
 
-const CNABDownloader = ({ generatedLines }) => {
+const Downloader = ({ generatedLines, formatter, type }) => {
   const clickHandler = () => {
     const element = document.createElement("a")
-    const fileName = `${new Date().getTime()} - cnab_${generatedLines.length}_linhas.txt`
-    const content = ContentFormatter().format(generatedLines)
+    const fileName = `${new Date().getTime()} - ${type.toLowerCase()}_${generatedLines.length}_linhas.txt`
+    const content = formatter().format(generatedLines)
     element.setAttribute(
       "href",
       "data:text/plain;charset=utf-8," + encodeURIComponent(content)
@@ -21,14 +20,14 @@ const CNABDownloader = ({ generatedLines }) => {
     <button
       onClick={clickHandler}
       className="btn btn-light">
-      Baixar CNAB
+      Baixar {type.toUpperCase()}
     </button>
   )
 }
 
 
-CNABDownloader.propTypes = {
+Downloader.propTypes = {
   generatedLines: PropTypes.array.isRequired,
 };
 
-export default CNABDownloader
+export default Downloader

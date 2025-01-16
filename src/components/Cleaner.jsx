@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const CNABCleaner = ({ setGeneratedLines }) => {
+const Cleaner = ({ setGeneratedLines }) => {
   const clickHandler = () => {
     setGeneratedLines([])
   }
@@ -14,8 +14,8 @@ const CNABCleaner = ({ setGeneratedLines }) => {
   )
 }
 
-CNABCleaner.propTypes = {
+Cleaner.propTypes = {
   setGeneratedLines: PropTypes.func.isRequired,
 };
 
-export default CNABCleaner
+export default Cleaner

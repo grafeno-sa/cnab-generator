@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import LineGenerator from '../components/CNAB/LineGenerator';
-import CNABCleaner from '../components/CNAB/CNABCleaner';
+import Cleaner from '../components/Cleaner';
 import CNABPreview from '../components/CNAB/CNABPreview';
-import CNABDownloader from '../components/CNAB/CNABDownloader';
 import FieldEditor from '../components/CNAB/FieldEditor';
+import ContentFormatter from "../scripts/CNAB/contentFormatter";
+import Downloader from '../components/Downloader';
 
 function Cnab() {
   const [generatedLines, setGeneratedLines] = useState([])
@@ -52,9 +53,11 @@ function Cnab() {
 
       <div className='row flex-end'>
         <div className='col-12 container'>
-          <CNABCleaner setGeneratedLines={setGeneratedLines}/>
-          <CNABDownloader
-            generatedLines={generatedLines} />
+          <Cleaner setGeneratedLines={setGeneratedLines}/>
+          <Downloader
+            generatedLines={generatedLines}
+            type={"cnab"}
+            formatter={ContentFormatter} />
         </div>
       </div>
 

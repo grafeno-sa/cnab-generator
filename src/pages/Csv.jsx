@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import CNABPreview from '../components/CSV/CSVPreview';
+import CSVPreview from '../components/CSV/CSVPreview';
 import LineGenerator from '../components/CSV/LineGenerator';
+import Cleaner from '../components/Cleaner';
+import ContentFormatter from '../scripts/CSV/contentFormatter';
+import Downloader from '../components/Downloader';
 
 function Csv() {
   const [generatedLines, setGeneratedLines] = useState([])
@@ -16,13 +19,24 @@ function Csv() {
             </div>
         )) }
       </div>
+
+       <div className='row flex-end'>
+          <div className='col-12 container'>
+            <Cleaner setGeneratedLines={setGeneratedLines}/>
+            <Downloader
+              generatedLines={generatedLines}
+              type={"csv"}
+              formatter={ContentFormatter} />
+          </div>
+        </div>
+
       <p>
         <span className='mr-3'>
           Total de linhas: {generatedLines.length}
         </span>
       </p>
 
-      <CNABPreview generatedLines={generatedLines}/>
+      <CSVPreview generatedLines={generatedLines}/>
     </div>
   )
 }

@@ -11,7 +11,7 @@ const CSV_LINE_FIELDS = [
   {
     name: 'numero_documento',
     description: 'Documento Pagador',
-    defaultValue: () => { generateCleanCNPJ();},
+    defaultValue: () =>  generateCleanCNPJ(),
     category: 'payer',
   },
   {
@@ -33,7 +33,7 @@ const CSV_LINE_FIELDS = [
   {
     name: 'vencimento',
     description: 'Vencimento do Título',
-    defaultValue: () => { generateFormattedDate({ future: true, separator: '/' }) },
+    defaultValue: () => generateFormattedDate({ future: true, separator: '/', fullYear: true }),
     category: 'asset',
   },
   {

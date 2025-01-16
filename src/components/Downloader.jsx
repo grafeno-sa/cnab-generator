@@ -19,7 +19,7 @@ const Downloader = ({ generatedLines, formatter, type }) => {
   return (
     <button
       onClick={clickHandler}
-      className="btn btn-light">
+      className="btn btn-primary">
       Baixar {type.toUpperCase()}
     </button>
   )

@@ -29,7 +29,7 @@ const LineGenerator = ({ quantity, stateHook }) => {
   return (
     <button
       onClick={clickHandler}
-      className="btn btn-primary">
+      className="btn btn-light">
         <span>{`Adicionar ${quantity} linha${quantity == 1 ? '' : 's'}`}</span>
     </button>
   )

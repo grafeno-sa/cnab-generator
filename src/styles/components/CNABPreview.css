@@ -1,8 +1,0 @@
-textarea.cnab-preview {
-  width: 100%;
-  white-space: pre-wrap;
-  resize: none;
-  min-height: 60vh;
-  margin: 0 auto;
-  overflow: auto;
-}

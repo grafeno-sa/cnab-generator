@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import CSVPreview from '../components/CSV/CSVPreview';
 import LineGenerator from '../components/CSV/LineGenerator';
 import Cleaner from '../components/Cleaner';
 import ContentFormatter from '../scripts/CSV/contentFormatter';
 import Downloader from '../components/Downloader';
+import Preview from '../components/Preview';
 
 function Csv() {
   const [generatedLines, setGeneratedLines] = useState([])
@@ -36,7 +36,9 @@ function Csv() {
         </span>
       </p>
 
-      <CSVPreview generatedLines={generatedLines}/>
+      <Preview
+        generatedLines={generatedLines}
+        formatter={ContentFormatter} />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import LineGenerator from '../components/CNAB/LineGenerator';
 import Cleaner from '../components/Cleaner';
-import CNABPreview from '../components/CNAB/CNABPreview';
+import Preview from '../components/Preview';
 import FieldEditor from '../components/CNAB/FieldEditor';
 import ContentFormatter from "../scripts/CNAB/contentFormatter";
 import Downloader from '../components/Downloader';
@@ -73,7 +73,9 @@ function Cnab() {
           setGeneratedLines={setGeneratedLines}/>
       </div>
 
-      <CNABPreview generatedLines={generatedLines}/>
+      <Preview
+        generatedLines={generatedLines}
+        formatter={ContentFormatter} />
     </div>
   )
 }

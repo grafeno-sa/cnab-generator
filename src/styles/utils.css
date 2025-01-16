@@ -49,6 +49,15 @@
   background-color: var(--muted-color-darker)
 }
 
+.btn-link {
+  color: var(--muted-color-darker);
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
 .mt-2 {
   margin-top: 10px;
 }
@@ -97,6 +106,10 @@
   flex-wrap: wrap;
 }
 
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
 .flex-end {
   justify-self: flex-end;
 }
@@ -119,6 +132,10 @@
 
 .row input {
   width: 80%;
+}
+
+.w-100 {
+  width: 100%;
 }
 
 .flex-align-center {

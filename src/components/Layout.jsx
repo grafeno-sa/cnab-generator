@@ -5,8 +5,10 @@ function Layout() {
   return (
     <div>
       <Navbar />
-      <main style={{ padding: '20px' }}>
-        <Outlet />
+      <main>
+        <div className="container mt-3">
+          <Outlet />
+        </div>
       </main>
     </div>
   );

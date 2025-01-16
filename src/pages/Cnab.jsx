@@ -10,7 +10,7 @@ function Cnab() {
   const [generatedLines, setGeneratedLines] = useState([])
 
   return (
-    <div className="container">
+    <>
       <div className="row">
         <p className='bold text-center ml-2'>Registro 1</p>
       </div>
@@ -76,7 +76,7 @@ function Cnab() {
       <Preview
         generatedLines={generatedLines}
         formatter={ContentFormatter} />
-    </div>
+    </>
   )
 }
 

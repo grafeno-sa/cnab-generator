@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 function AccordionItem({ title, content }) {
@@ -33,5 +34,10 @@ function AccordionItem({ title, content }) {
     </div>
   );
 }
+
+AccordionItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  content: PropTypes.any.isRequired
+};
 
 export default AccordionItem;

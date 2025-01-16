@@ -28,6 +28,8 @@ const Downloader = ({ generatedLines, formatter, type }) => {
 
 Downloader.propTypes = {
   generatedLines: PropTypes.array.isRequired,
+  formatter: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired
 };
 
 export default Downloader

@@ -143,6 +143,33 @@ const REGISTRO1_FIELDS = [
     paddingType: '0'
   },
   {
+    name: "enderecoSacado",                                                                                                   
+    description: "Endereço do sacado",
+    startIndex: 275,
+    endIndex: 314,
+    defaultValue: () => 'Rua Tudis Parque Ipanema',
+    maxLength: 40,
+    paddingType: ' '
+  },
+  {
+    name: "cepSacado",                                                                                                   
+    description: "CEP do sacado",
+    startIndex: 327,
+    endIndex: 331,
+    defaultValue: () => '26321',
+    maxLength: 5,
+    paddingType: ' '
+  },
+  {
+    name: "complementoCepSacado",                                                                                                   
+    description: "Complemento CEP do sacado",
+    startIndex: 332,
+    endIndex: 334,
+    defaultValue: () => '530',
+    maxLength: 3,
+    paddingType: ' '
+  },
+  {
     name: "documentoSacadorAvalista",
     description: "Documento Sacador Avalista",
     startIndex: 335,

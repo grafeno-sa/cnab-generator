@@ -20,25 +20,25 @@ const Field = ({ field, setEditedFields }) => {
     setEditedFields(prev => {
       if(!doesValueExist(e.target.value)) return prev
 
-      const newEditedField = {
-        name: field.name,
-        value: e.target.value,
-        index: prev.length
-      }
-
       if (!includesField(prev)) {
+        const newEditedField = {
+          name: field.name,
+          value: e.target.value,
+          index: prev.length
+        }
+
         return [...prev, newEditedField]
       }
       else {
         const index = prev.find(f => f.name == field.name).index
-        prev[index] = newEditedField
+        prev[index]['value'] = e.target.value
         return prev
       }
     })
   }
 
   const includesField = (fields) => {
-    if (!fields.length) return false;
+    if (!fields.length) return false
 
     return !!fields.filter(f => f.name == field.name).length
   }

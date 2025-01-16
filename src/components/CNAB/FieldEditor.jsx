@@ -58,10 +58,10 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
         </button>
       </div>
       <div className="row mt-3">
-        {fieldOptions.map((field) => (
+        {fieldOptions.map((field, index) => (
           <Field
             field={field}
-            key={field.startIndex}
+            key={index}
             setEditedFields={setEditedFields}/>
         ))}
       </div>

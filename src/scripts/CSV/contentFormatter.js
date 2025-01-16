@@ -1,4 +1,4 @@
-import { CSV_LINE_FIELDS } from './lineFields';
+import CSV_LINE_FIELDS from './lineFields';
 
 const ContentFormatter = () => {
   const format = (generatedLines) => {
@@ -14,7 +14,7 @@ const ContentFormatter = () => {
   }
 
   const formatData = (generatedLines) => {
-    return generatedLines.map(line => line.data.join(';'))
+    return generatedLines.map(line => Object.values(line.data).join(';'))
   }
 
   return { format }

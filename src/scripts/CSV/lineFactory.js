@@ -1,7 +1,7 @@
-import { CSV_LINE_FIELDS } from './lineFields';
+import CSV_LINE_FIELDS from './lineFields';
 
 const generateLine = ({ generatedLines}) => {
-  let newLine = {};
+  let newLine = { data: {} };
 
   CSV_LINE_FIELDS.forEach((field) => {
     newLine['data'][field.name] = field.defaultValue();

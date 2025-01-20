@@ -38,7 +38,7 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
         <button
           onClick={handleEditAll}
           className="btn btn-danger">
-          Editar todos as linhas
+          Editar todas as linhas
         </button>
         <button
           onClick={handleEditLast}

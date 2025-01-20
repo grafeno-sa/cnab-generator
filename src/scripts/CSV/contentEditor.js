@@ -1,11 +1,10 @@
-// refatorar
 import { last as arrayLast } from 'lodash'
 
 const ContentEditor = () => {
   const editAll = ({ generatedLines, editedFields }) => {
     generatedLines.map((line) => {
       editedFields.forEach((field) => {
-        line[field.name] = field.value
+        line.data[field.name] = field.value
       })
 
       return line
@@ -15,9 +14,9 @@ const ContentEditor = () => {
   }
 
   const editLast = ({ generatedLines, editedFields }) => {
-    const lineToEdit = arrayLast(editedFields)
+    const lineToEdit = arrayLast(generatedLines)
     editedFields.forEach((field) => {
-      lineToEdit[field.name] = field.value
+      lineToEdit.data[field.name] = field.value
     })
 
     generatedLines[lineToEdit.index] = lineToEdit

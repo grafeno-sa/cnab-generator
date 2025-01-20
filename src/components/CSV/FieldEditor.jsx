@@ -1,6 +1,6 @@
 import { useState } from "react"
 import PropTypes from "prop-types";
-import Field from "./Field"
+import Field from "../Field"
 import ContentEditor from "../../scripts/CSV/contentEditor"
 import CSV_LINE_FIELDS from "../../scripts/CSV/lineFields"
 
@@ -8,17 +8,17 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
   const [editedFields, setEditedFields] = useState([])
 
   const handleEditAll = () => {
-    const editedLines = ContentEditor().editAll({ generatedLines, editedFields, recordType })
+    const editedLines = ContentEditor().editAll({ generatedLines, editedFields })
     setGeneratedLines(() => [...editedLines])
   }
   
   const handleEditLast = () => {
-    const editedLines = ContentEditor().editLast({ generatedLines, editedFields, recordType })
+    const editedLines = ContentEditor().editLast({ generatedLines, editedFields })
     setGeneratedLines(() => [...editedLines])
   }
 
   const handleEditLastLine = () => {
-    const editedLines = ContentEditor().deleteLast({ generatedLines, editedFields, recordType })
+    const editedLines = ContentEditor().deleteLast({ generatedLines, editedFields })
     setGeneratedLines(() => [...editedLines])
   }
 

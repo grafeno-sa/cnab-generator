@@ -1,6 +1,6 @@
 import { useState } from "react"
 import PropTypes from "prop-types";
-import Field from "./Field"
+import Field from "../Field"
 import getLineFields from "../../scripts/CNAB/lineFields"
 import ContentEditor from "../../scripts/CNAB/contentEditor"
 

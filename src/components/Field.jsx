@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react"
-import doesValueExist from "../../scripts/doesValueExist"
+import doesValueExist from "../scripts/doesValueExist"
 
 const Field = ({ field, setEditedFields }) => {
   const [currentLength, setCurrentLength] = useState(0)
@@ -58,7 +58,7 @@ const Field = ({ field, setEditedFields }) => {
         onBlur={updateEditedFields}
         value={value}/>
       <br/>
-      <small>qtd caracteres: {currentLength}/{field.maxLength}</small>
+      <small>qtd caracteres: {currentLength}{`${field.maxLength ? ('/' + field.maxLength) : ''}`}</small>
     </div>
   )
 }
@@ -68,9 +68,9 @@ Field.propTypes = {
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       defaultValue: PropTypes.func.isRequired,
-      startIndex: PropTypes.number.isRequired,
-      endIndex: PropTypes.number.isRequired,
-      maxLength: PropTypes.number.isRequired,
+      startIndex: PropTypes.number,
+      endIndex: PropTypes.number,
+      maxLength: PropTypes.number,
     }),
   setEditedFields: PropTypes.func.isRequired,
 };

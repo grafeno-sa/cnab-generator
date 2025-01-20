@@ -115,7 +115,7 @@ const CSV_LINE_FIELDS = [
   },
   {
     name: 'pagador_telefone',
-    description: 'Tefeone Pagador',
+    description: 'Telefone Pagador',
     defaultValue: () => '19997999989',
     category: 'payer',
   },

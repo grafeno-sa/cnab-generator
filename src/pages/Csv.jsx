@@ -4,6 +4,8 @@ import Cleaner from '../components/Cleaner';
 import ContentFormatter from '../scripts/CSV/contentFormatter';
 import Downloader from '../components/Downloader';
 import Preview from '../components/Preview';
+import FieldEditor from '../components/CSV/FieldEditor';
+import AccordionItem from '../components/Accordeon';
 
 function Csv() {
   const [generatedLines, setGeneratedLines] = useState([])
@@ -35,6 +37,14 @@ function Csv() {
           Total de linhas: {generatedLines.length}
         </span>
       </p>
+
+      <div className='pb-5'>
+        <AccordionItem
+          title={'Editar dados'}
+          content={<FieldEditor
+                      generatedLines={generatedLines}
+                      setGeneratedLines={setGeneratedLines}/>} />
+      </div>
 
       <Preview
         generatedLines={generatedLines}

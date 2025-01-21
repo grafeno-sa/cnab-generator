@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Field from "../Field"
 import getLineFields from "../../scripts/CNAB/lineFields"
 import ContentEditor from "../../scripts/CNAB/contentEditor"
+import AccordionItem from "../Accordeon";
 
 const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
   const editableTypes = ['registro1', 'registro2', 'registro3', 'registro7']
@@ -31,7 +32,38 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
     setGeneratedLines(() => [...editedLines])
   }
 
-  if (!generatedLines.length) {
+  const buttons = () => {
+    if (!generatedLines.length) return (<></>)
+
+    return (
+      <>
+        <div className="row mb-3">
+          <select
+            onChange={selectHandler}
+            className="mr-3 flex-align-center">
+            {editableTypes.map((t, index) => <option value={t} key={index}>{t}</option>)}
+          </select>
+          <button
+            onClick={handleEditAll}
+            className="btn btn-danger">
+            Editar todos os {recordType}
+          </button>
+          <button
+            onClick={handleEditLast}
+            className="btn btn-danger">
+            Editar o último {recordType}
+          </button>
+          <button
+            onClick={handleEditLastLine}
+            className="btn btn-danger">
+            Remover a última linha
+          </button>
+        </div>
+      </>
+    )
+  }
+
+  const defaultContent = () => {
     return (
       <>
         <p>
@@ -41,30 +73,10 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
     )
   }
 
-  return (
-    <>
-      <div className="row mb-3">
-        <select
-          onChange={selectHandler}
-          className="mr-3 flex-align-center">
-          {editableTypes.map((t, index) => <option value={t} key={index}>{t}</option>)}
-        </select>
-        <button
-          onClick={handleEditAll}
-          className="btn btn-danger">
-          Editar todos os {recordType}
-        </button>
-        <button
-          onClick={handleEditLast}
-          className="btn btn-danger">
-          Editar o último {recordType}
-        </button>
-        <button
-          onClick={handleEditLastLine}
-          className="btn btn-danger">
-          Remover a última linha
-        </button>
-      </div>
+  const content = () => {
+    if (!generatedLines.length) return defaultContent()
+
+    return (
       <div className="row mt-3">
         {fieldOptions.map((field, index) => (
           <Field
@@ -73,6 +85,15 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
             setEditedFields={setEditedFields}/>
         ))}
       </div>
+    )
+  }
+
+  return (
+    <>
+      {buttons()}
+      <AccordionItem
+                title={'Editar dados'}
+                content={content()} />
     </>
   )
 }

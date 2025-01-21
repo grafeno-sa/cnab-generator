@@ -69,11 +69,9 @@ function Cnab() {
       </p>
 
       <div className='pb-5'>
-        <AccordionItem
-          title={'Editar dados'}
-          content={<FieldEditor
-                      generatedLines={generatedLines}
-                      setGeneratedLines={setGeneratedLines}/>} />
+       <FieldEditor
+          generatedLines={generatedLines}
+          setGeneratedLines={setGeneratedLines}/>
       </div>
 
       <Preview

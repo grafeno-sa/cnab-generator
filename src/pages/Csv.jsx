@@ -5,7 +5,6 @@ import ContentFormatter from '../scripts/CSV/contentFormatter';
 import Downloader from '../components/Downloader';
 import Preview from '../components/Preview';
 import FieldEditor from '../components/CSV/FieldEditor';
-import AccordionItem from '../components/Accordeon';
 
 function Csv() {
   const [generatedLines, setGeneratedLines] = useState([])

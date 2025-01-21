@@ -5,7 +5,6 @@ import Preview from '../components/Preview';
 import FieldEditor from '../components/CNAB/FieldEditor';
 import ContentFormatter from "../scripts/CNAB/contentFormatter";
 import Downloader from '../components/Downloader';
-import AccordionItem from '../components/Accordeon';
 
 function Cnab() {
   const [generatedLines, setGeneratedLines] = useState([])

@@ -7,19 +7,12 @@ const Field = ({ field, setEditedFields }) => {
   const [value, setValue] = useState('')
 
   const changeHandler = (e) => {
-    if (doesValueExist(e.target.value)) {
-      setValue(e.target.value)
-      setCurrentLength(e.target.value.length)
-    } else {
-      setValue('')
-      setCurrentLength(0)
-    }
+    setValue(e.target.value)
+    setCurrentLength(e.target.value.length)
   }
 
   const updateEditedFields = (e) => {
     setEditedFields(prev => {
-      if(!doesValueExist(e.target.value)) return prev
-
       if (!includesField(prev)) {
         const newEditedField = {
           name: field.name,

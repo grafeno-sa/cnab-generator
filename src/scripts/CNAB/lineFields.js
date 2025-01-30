@@ -134,6 +134,15 @@ const REGISTRO1_FIELDS = [
     paddingType: 0,
   },
   {
+    name: "jurosAtraso",
+    description: "Juros por dia",
+    startIndex: 161,
+    endIndex: 173,
+    defaultValue: () => '',
+    maxLength: 13,
+    paddingType: 0,
+  },
+  {
     name: "documentoSacado",                                                                                                   
     description: "CPF/CNPJ do sacado",
     startIndex: 221,

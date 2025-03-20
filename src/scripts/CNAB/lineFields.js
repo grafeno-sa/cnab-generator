@@ -206,7 +206,7 @@ const REGISTRO1_FIELDS = [
     paddingType: ' '
   },
   {
-    name: "mensagem1",
+    name: "mensagem1Reg1",
     description: "Mensagem 1",
     startIndex: 315,
     endIndex: 326,

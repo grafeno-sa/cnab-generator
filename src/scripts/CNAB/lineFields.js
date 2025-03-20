@@ -85,6 +85,24 @@ const REGISTRO1_FIELDS = [
     paddingType: '0'
   },
   {
+    name: 'informacaoMulta',
+    description: 'Informação Multa (0 = s/multa | 2 = %)',
+    startIndex: 66,
+    endIndex: 66,
+    defaultValue: () => '0',
+    maxLength: 1,
+    paddingType: '0'
+  },
+  {
+    name: 'percentualMulta',
+    description: 'Percentual Multa',
+    startIndex: 67,
+    endIndex: 70,
+    defaultValue: () => '0',
+    maxLength: 4,
+    paddingType: '0'
+  },
+  {
     name: "ourNumber",
     description: "Nosso Número do Título",
     startIndex: 71,
@@ -143,6 +161,33 @@ const REGISTRO1_FIELDS = [
     paddingType: 0,
   },
   {
+    name: 'limiteDesconto',
+    description: 'Limite Desconto ',
+    startIndex: 174,
+    endIndex: 179,
+    defaultValue: () => '',
+    maxLength: 6,
+    paddingType: ' '
+  },
+  {
+    name: 'valorDesconto',
+    description: 'Valor Desconto',
+    startIndex: 180,
+    endIndex: 192,
+    defaultValue: () => '',
+    maxLength: 13,
+    paddingType: '0'
+  },
+  {
+    name: 'valorAbatimento',
+    description: 'Valor Abatimento',
+    startIndex: 206,
+    endIndex: 218,
+    defaultValue: () => '',
+    maxLength: 13,
+    paddingType: '0'
+  },
+  {
     name: "documentoSacado",                                                                                                   
     description: "CPF/CNPJ do sacado",
     startIndex: 221,
@@ -158,6 +203,15 @@ const REGISTRO1_FIELDS = [
     endIndex: 314,
     defaultValue: () => 'Rua Tudis Parque Ipanema',
     maxLength: 40,
+    paddingType: ' '
+  },
+  {
+    name: "mensagem1",                                                                                                   
+    description: "Mensagem 1",
+    startIndex: 315,
+    endIndex: 326,
+    defaultValue: () => 'mensagem 1',
+    maxLength: 12,
     paddingType: ' '
   },
   {

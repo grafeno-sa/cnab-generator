@@ -162,7 +162,7 @@ const REGISTRO1_FIELDS = [
   },
   {
     name: 'limiteDesconto',
-    description: 'Limite Desconto ',
+    description: 'Limite Desconto',
     startIndex: 174,
     endIndex: 179,
     defaultValue: () => '',

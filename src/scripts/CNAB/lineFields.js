@@ -85,6 +85,15 @@ const REGISTRO1_FIELDS = [
     paddingType: '0'
   },
   {
+    name: 'numBancoCobrador',
+    description: 'Código do Banco Cobrador',
+    startIndex: 63,
+    endIndex: 65,
+    defaultValue: () => '310',
+    maxLength: 3,
+    paddingType: '0'
+  },
+  {
     name: 'informacaoMulta',
     description: 'Informação Multa (0 = s/multa | 2 = %)',
     startIndex: 66,

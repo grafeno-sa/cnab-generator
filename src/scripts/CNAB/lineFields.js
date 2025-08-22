@@ -206,6 +206,15 @@ const REGISTRO1_FIELDS = [
     paddingType: '0'
   },
   {
+    name: "nome_sacado",
+    description: "Nome do Pagador",
+    startIndex: 235,
+    endIndex: 274,
+    defaultValue: () => 'pagador gerador cnab',
+    maxLength: 40,
+    paddingType: ' '
+  },
+  {
     name: "enderecoSacado",                                                                                                   
     description: "Endereço do sacado",
     startIndex: 275,

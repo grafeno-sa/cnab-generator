@@ -26,11 +26,20 @@ function CnabValidator() {
     const invalidSizes = uniqueSizes.filter(size => size !== 400 && size !== 444);
     if (invalidSizes.length > 0) {
       errors.push(`Tamanhos de linha inválidos encontrados: ${invalidSizes.join(', ')}. Apenas 400 ou 444 caracteres são permitidos.`);
-      // Add warnings for lines with invalid sizes
+      // Group lines by their size
+      const linesBySize = {};
       lines.forEach((line, index) => {
         if (line.length !== 400 && line.length !== 444) {
-          warnings.push(`Linha ${index + 1}: ${line.length} caracteres (esperado: 400 ou 444)`);
+          if (!linesBySize[line.length]) {
+            linesBySize[line.length] = [];
+          }
+          linesBySize[line.length].push(index + 1);
         }
+      });
+      // Create grouped warnings
+      Object.keys(linesBySize).sort((a, b) => a - b).forEach(size => {
+        const lineNumbers = linesBySize[size];
+        warnings.push(`${lineNumbers.length} linha(s) com ${size} caracteres (esperado: 400 ou 444): Linhas ${lineNumbers.join(', ')}`);
       });
     }
 
@@ -46,10 +55,20 @@ function CnabValidator() {
       const expectedSize = Object.keys(sizeCounts).reduce((a, b) => 
         sizeCounts[a] > sizeCounts[b] ? a : b
       );
+      // Group lines by their size
+      const linesBySize = {};
       lines.forEach((line, index) => {
         if (line.length !== parseInt(expectedSize)) {
-          warnings.push(`Linha ${index + 1}: ${line.length} caracteres (esperado: ${expectedSize})`);
+          if (!linesBySize[line.length]) {
+            linesBySize[line.length] = [];
+          }
+          linesBySize[line.length].push(index + 1);
         }
+      });
+      // Create grouped warnings
+      Object.keys(linesBySize).sort((a, b) => a - b).forEach(size => {
+        const lineNumbers = linesBySize[size];
+        warnings.push(`${lineNumbers.length} linha(s) com ${size} caracteres (esperado: ${expectedSize}): Linhas ${lineNumbers.join(', ')}`);
       });
     }
 

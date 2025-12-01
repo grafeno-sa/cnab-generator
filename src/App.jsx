@@ -11,9 +11,9 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
-        <Route path="/cnab-generator" element={<Cnab />} />
-        <Route path="/cnab-generator/csv" element={<Csv />} />
-        <Route path="/cnab-generator/validate" element={<Cnab400Validator />} />
+        <Route index element={<Cnab />} />
+        <Route path="/csv" element={<Csv />} />
+        <Route path="/validate" element={<Cnab400Validator />} />
       </Route>
     </Routes>
   );

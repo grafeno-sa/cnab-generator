@@ -5,11 +5,11 @@ function Navbar() {
     <nav>
       <div className="container">
         <div className="row row-reverse w-100">
-          <Link to="/cnab-generator/"
+          <Link to="/"
                 className='btn btn-link'>Gerar CNAB</Link>
-          <Link to="/cnab-generator/csv"
+          <Link to="/csv"
                 className='btn btn-link'>Gerar CSV</Link>
-          <Link to="/cnab-generator/validate"
+          <Link to="/validate"
                 className='btn btn-link'>Validar CNAB 400/444</Link>
         </div>
       </div>

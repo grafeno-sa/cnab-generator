@@ -36,14 +36,15 @@ function Cnab400Validator() {
     'Todas as linhas devem ter exatamente 400 ou 444 caracteres',
     'Todas as linhas devem ter o mesmo tamanho',
     'A primeira linha (header) deve começar com &apos;0&apos;',
-    'A última linha (trailer) deve começar com &apos;9&apos;'
+    'A última linha (trailer) deve começar com &apos;9&apos;',
+    'As linhas intermediárias (registros) devem começar com &apos;1&apos;, &apos;2&apos;, &apos;3&apos; ou &apos;7&apos;'
   ];
 
   return (
     <div className="container">
       <div className="row">
         <div className="col-12">
-          <h2 className="text-center mb-3">Validador CNAB</h2>
+          <h2 className="text-center mb-3">Validador CNAB 400/444</h2>
           <p className="text-center mb-3">
             Faça upload de um arquivo .txt ou .rem para validar sua estrutura
           </p>

@@ -11,7 +11,7 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
     return { isValid: false, errors, details };
   }
 
-  const { HEADER, TRAILER } = lineIds;
+  const { HEADER, TRAILER, VALID_REGISTERS } = lineIds;
   
   // Split content into lines
   const lines = content.split('\n').filter(line => line.length > 0);
@@ -21,35 +21,59 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
     return { isValid: false, errors, details };
   }
 
-  // Check line sizes
-  const lineSizes = lines.map(line => line.length);
-  const uniqueSizes = [...new Set(lineSizes)];
+  // Single pass validation
+  const lineSizes = [];
+  const linesBySize = {};
+  const invalidRegisterLines = [];
   
-  // Check if all lines have valid size
-  const invalidSizes = uniqueSizes.filter(size => !expectedSizes.includes(size));
+  lines.forEach((line, index) => {
+    const lineNumber = index + 1;
+    const lineSize = line.length;
+    const lineId = line[0];
+    
+    // Track line sizes
+    lineSizes.push(lineSize);
+    
+    // Check line size validity and group by size
+    if (!expectedSizes.includes(lineSize)) {
+      if (!linesBySize[lineSize]) {
+        linesBySize[lineSize] = [];
+      }
+      linesBySize[lineSize].push(lineNumber);
+    }
+    
+    // Check header (first line)
+    if (index === 0 && lineId !== HEADER) {
+      errors.push(`Header inválido: primeira linha deve começar com '${HEADER}', mas começa com '${lineId}'`);
+    }
+    
+    // Check trailer (last line)
+    if (index === lines.length - 1 && lineId !== TRAILER) {
+      errors.push(`Trailer inválido: última linha deve começar com '${TRAILER}', mas começa com '${lineId}'`);
+    }
+    
+    // Check middle lines (registers)
+    if (index > 0 && index < lines.length - 1 && VALID_REGISTERS && !VALID_REGISTERS.includes(lineId)) {
+      invalidRegisterLines.push(lineNumber);
+    }
+  });
+  
+  const uniqueSizes = [...new Set(lineSizes)];
+  const invalidSizes = Object.keys(linesBySize);
+  
+  // Report invalid sizes
   if (invalidSizes.length > 0) {
     errors.push(`Tamanhos de linha inválidos encontrados: ${invalidSizes.join(', ')}. Apenas ${expectedSizes.join(' ou ')} caracteres são permitidos.`);
-    // Group lines by their size
-    const linesBySize = {};
-    lines.forEach((line, index) => {
-      if (!expectedSizes.includes(line.length)) {
-        if (!linesBySize[line.length]) {
-          linesBySize[line.length] = [];
-        }
-        linesBySize[line.length].push(index + 1);
-      }
-    });
-    // Create grouped details
     Object.keys(linesBySize).sort((a, b) => a - b).forEach(size => {
       const lineNumbers = linesBySize[size];
       details.push(`<strong>${lineNumbers.length} linha(s) com ${size} caracteres (esperado: ${expectedSizes.join(' ou ')}):</strong> Linhas ${lineNumbers.join(', ')}`);
     });
   }
-
-  // Check if all lines have the same size
+  
+  // Check if all lines have the same size (only if no invalid sizes)
   if (uniqueSizes.length > 1 && invalidSizes.length === 0) {
     errors.push(`Todas as linhas devem ter o mesmo tamanho. Tamanhos encontrados: ${uniqueSizes.join(', ')}`);
-    // Determine the most common size to use as expected
+    // Determine the most common size
     const sizeCounts = {};
     lineSizes.forEach(size => {
       sizeCounts[size] = (sizeCounts[size] || 0) + 1;
@@ -57,31 +81,26 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
     const expectedSize = Object.keys(sizeCounts).reduce((a, b) => 
       sizeCounts[a] > sizeCounts[b] ? a : b
     );
-    // Group lines by their size
-    const linesBySize = {};
+    // Group lines with different sizes
+    const inconsistentLines = {};
     lines.forEach((line, index) => {
       if (line.length !== parseInt(expectedSize)) {
-        if (!linesBySize[line.length]) {
-          linesBySize[line.length] = [];
+        if (!inconsistentLines[line.length]) {
+          inconsistentLines[line.length] = [];
         }
-        linesBySize[line.length].push(index + 1);
+        inconsistentLines[line.length].push(index + 1);
       }
     });
-    // Create grouped details
-    Object.keys(linesBySize).sort((a, b) => a - b).forEach(size => {
-      const lineNumbers = linesBySize[size];
+    Object.keys(inconsistentLines).sort((a, b) => a - b).forEach(size => {
+      const lineNumbers = inconsistentLines[size];
       details.push(`<strong>${lineNumbers.length} linha(s) com ${size} caracteres (esperado: ${expectedSize}):</strong> Linhas ${lineNumbers.join(', ')}`);
     });
   }
-
-  // Check header (first line must start with HEADER)
-  if (lines[0][0] !== HEADER) {
-    errors.push(`Header inválido: primeira linha deve começar com '${HEADER}', mas começa com '${lines[0][0]}'`);
-  }
-
-  // Check trailer (last line must start with TRAILER)
-  if (lines[lines.length - 1][0] !== TRAILER) {
-    errors.push(`Trailer inválido: última linha deve começar com '${TRAILER}', mas começa com '${lines[lines.length - 1][0]}'`);
+  
+  // Report invalid registers
+  if (invalidRegisterLines.length > 0) {
+    errors.push(`Registros inválidos: ${invalidRegisterLines.length} linha(s) com identificador inválido. Valores permitidos: ${VALID_REGISTERS.join(', ')}`);
+    details.push(`<strong>${invalidRegisterLines.length} linha(s) com identificador de registro inválido (esperado: ${VALID_REGISTERS.join(', ')}):</strong> Linhas ${invalidRegisterLines.join(', ')}`);
   }
 
   const isValid = errors.length === 0;

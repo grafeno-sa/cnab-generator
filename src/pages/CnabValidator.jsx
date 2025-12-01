@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Toast } from '../vendors/swal/toast';
+import '../styles/components/CnabValidator.css';
 
 function CnabValidator() {
   const [validationResult, setValidationResult] = useState(null);
@@ -119,8 +120,8 @@ function CnabValidator() {
     <div className="container">
       <div className="row">
         <div className="col-12">
-          <h2 className="text-center mb-4">Validador CNAB</h2>
-          <p className="text-center mb-4">
+          <h2 className="text-center mb-3">Validador CNAB</h2>
+          <p className="text-center mb-3">
             Faça upload de um arquivo .txt ou .rem para validar sua estrutura
           </p>
         </div>
@@ -128,13 +129,7 @@ function CnabValidator() {
 
       <div className="row">
         <div className="col-12">
-          <div className="file-upload-section" style={{ 
-            border: '2px dashed #ccc', 
-            borderRadius: '8px', 
-            padding: '2rem',
-            textAlign: 'center',
-            marginBottom: '2rem'
-          }}>
+          <div className="file-upload-section">
             <input
               type="file"
               accept=".txt,.rem"
@@ -144,19 +139,12 @@ function CnabValidator() {
             />
             <label 
               htmlFor="cnab-file-input" 
-              style={{ 
-                cursor: 'pointer',
-                padding: '0.75rem 1.5rem',
-                backgroundColor: '#007bff',
-                color: 'white',
-                borderRadius: '4px',
-                display: 'inline-block'
-              }}
+              className="file-upload-label"
             >
               Selecionar Arquivo
             </label>
             {fileName && (
-              <p style={{ marginTop: '1rem', fontWeight: 'bold' }}>
+              <p className="file-name-display">
                 Arquivo: {fileName}
               </p>
             )}
@@ -167,28 +155,20 @@ function CnabValidator() {
       {validationResult && (
         <div className="row">
           <div className="col-12">
-            <div style={{
-              border: `2px solid ${validationResult.isValid ? '#28a745' : '#dc3545'}`,
-              borderRadius: '8px',
-              padding: '1.5rem',
-              backgroundColor: validationResult.isValid ? '#d4edda' : '#f8d7da'
-            }}>
-              <h3 style={{ 
-                color: validationResult.isValid ? '#155724' : '#721c24',
-                marginBottom: '1rem'
-              }}>
+            <div className={`validation-result ${validationResult.isValid ? 'valid' : 'invalid'}`}>
+              <h3>
                 {validationResult.isValid ? '✓ Validação Bem-Sucedida' : '✗ Validação Falhou'}
               </h3>
 
-              <div style={{ marginBottom: '1rem' }}>
+              <div className="validation-info">
                 <p><strong>Total de linhas:</strong> {validationResult.lineCount}</p>
                 <p><strong>Tamanho das linhas:</strong> {validationResult.lineSize} caracteres</p>
               </div>
 
               {validationResult.errors.length > 0 && (
-                <div style={{ marginTop: '1rem' }}>
-                  <h4 style={{ color: '#721c24' }}>Erros:</h4>
-                  <ul style={{ color: '#721c24' }}>
+                <div className="validation-errors">
+                  <h4>Erros:</h4>
+                  <ul>
                     {validationResult.errors.map((error, index) => (
                       <li key={index}>{error}</li>
                     ))}
@@ -197,9 +177,9 @@ function CnabValidator() {
               )}
 
               {validationResult.warnings.length > 0 && (
-                <div style={{ marginTop: '1rem' }}>
-                  <h4 style={{ color: '#856404' }}>Avisos:</h4>
-                  <ul style={{ color: '#856404' }}>
+                <div className="validation-warnings">
+                  <h4>Avisos:</h4>
+                  <ul>
                     {validationResult.warnings.map((warning, index) => (
                       <li key={index}>{warning}</li>
                     ))}
@@ -211,13 +191,9 @@ function CnabValidator() {
         </div>
       )}
 
-      <div className="row mt-4">
+      <div className="row mt-3">
         <div className="col-12">
-          <div style={{ 
-            backgroundColor: '#f8f9fa', 
-            padding: '1.5rem', 
-            borderRadius: '8px' 
-          }}>
+          <div className="validation-rules">
             <h4>Regras de Validação:</h4>
             <ul>
               <li>O arquivo deve ter extensão .txt ou .rem</li>

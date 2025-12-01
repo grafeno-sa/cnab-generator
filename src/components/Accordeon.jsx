@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
-function AccordionItem({ title, content }) {
+function AccordionItem({ 
+  title, 
+  content, 
+  containerStyle = {}, 
+  headerStyle = {}, 
+  contentStyle = {} 
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleItem = () => {
@@ -12,22 +18,40 @@ function AccordionItem({ title, content }) {
     return isOpen ? '-' : '+' 
   };
 
+  const defaultContainerStyle = { 
+    marginBottom: '10px', 
+    border: '1px solid #ddd', 
+    borderRadius: '5px',
+    ...containerStyle
+  };
+  
+  const defaultHeaderStyle = {
+    padding: '10px',
+    background: '#f7f7f7',
+    cursor: 'pointer',
+    borderBottom: '1px solid #ddd',
+    borderRadius: '5px',
+    ...headerStyle
+  };
+  
+  const defaultContentStyle = { 
+    padding: '10px', 
+    background: '#fff',
+    borderRadius: '5px',
+    ...contentStyle
+  };
+
   return (
-    <div style={{ marginBottom: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
+    <div style={defaultContainerStyle}>
       <div
-        style={{
-          padding: '10px',
-          background: '#f7f7f7',
-          cursor: 'pointer',
-          borderBottom: '1px solid #ddd',
-        }}
+        style={defaultHeaderStyle}
         onClick={toggleItem}
       >
         {`${icon()} ${title}`}
       </div>
 
       {isOpen && (
-        <div style={{ padding: '10px', background: '#fff' }}>
+        <div style={defaultContentStyle}>
           {content}
         </div>
       )}
@@ -37,7 +61,10 @@ function AccordionItem({ title, content }) {
 
 AccordionItem.propTypes = {
   title: PropTypes.string.isRequired,
-  content: PropTypes.any.isRequired
+  content: PropTypes.any.isRequired,
+  containerStyle: PropTypes.object,
+  headerStyle: PropTypes.object,
+  contentStyle: PropTypes.object,
 };
 
 export default AccordionItem;

@@ -45,16 +45,32 @@ function ValidationResult({ result }) {
           {result.details.length > 0 && (
             <div className="validation-warnings">
               <h4>Detalhes:</h4>
-              {result.details.map((detail, index) => {
-                const { summary, lines } = parseDetail(detail);
-                return (
-                  <Accordeon 
-                    key={index}
-                    title={summary}
-                    content={<p style={{ margin: 0 }}>{lines}</p>}
-                  />
-                );
-              })}
+              <div className="details-accordions">
+                {result.details.map((detail, index) => {
+                  const { summary, lines } = parseDetail(detail);
+                  return (
+                    <Accordeon 
+                      key={index}
+                      title={summary}
+                      content={<p style={{ margin: 0 }}>{lines}</p>}
+                      containerStyle={{
+                        border: '1px solid #856404',
+                        borderRadius: '5px',
+                        marginBottom: '10px'
+                      }}
+                      headerStyle={{
+                        background: '#fff3cd',
+                        color: '#856404',
+                        borderBottom: '1px solid #856404'
+                      }}
+                      contentStyle={{
+                        background: '#fffbf0',
+                        color: '#856404'
+                      }}
+                    />
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>

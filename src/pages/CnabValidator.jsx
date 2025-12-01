@@ -165,7 +165,7 @@ function CnabValidator() {
               htmlFor="cnab-file-input" 
               className="file-upload-label"
             >
-              Selecionar Arquivo
+              {fileName ? 'Validar Outro Arquivo' : 'Selecionar Arquivo'}
             </label>
             {fileName && (
               <p className="file-name-display">

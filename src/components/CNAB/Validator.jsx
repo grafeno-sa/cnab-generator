@@ -13,8 +13,10 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
 
   const { HEADER, TRAILER, VALID_REGISTERS, REQUIRES_REGISTER_1 } = lineIds;
   
-  // Split content into lines
-  const lines = content.split('\n').filter(line => line.length > 0);
+  // Split content into lines and remove carriage returns
+  const lines = content.split('\n')
+    .map(line => line.replace(/\r/g, '')) // Remove carriage returns
+    .filter(line => line.length > 0);
   
   if (lines.length === 0) {
     errors.push('O arquivo está vazio');

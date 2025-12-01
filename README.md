@@ -31,4 +31,18 @@ Depois submeta o deploy. Esse comando atualiza o GH Pages automaticamente.
 npm run deploy
 ```
 
+## Documentação
+
+Para informações sobre como estender o projeto, consulte a documentação em `/docs`:
+
+### Guias de Desenvolvimento
+- [Adicionando um Novo Validador CNAB](docs/adicionar-validador-cnab.md) - Guia completo para adicionar suporte a novos tipos de CNAB
+- [Adicionando Novos Campos CNAB](docs/adicionar-campos-cnab.md) - Como configurar e adicionar campos personalizados ao gerador CNAB
+- [Adicionando Novos Campos CSV](docs/adicionar-campos-csv.md) - Como configurar e adicionar campos personalizados ao gerador CSV
+
+### Arquitetura
+- [Estrutura do Gerador CNAB](docs/estrutura-cnab.md) - Diagrama e explicação da arquitetura do gerador CNAB
+- [Estrutura do Gerador CSV](docs/estrutura-csv.md) - Diagrama e explicação da arquitetura do gerador CSV
+- [Estrutura do Validador CNAB](docs/estrutura-validador-cnab.md) - Fluxograma completo do processo de validação de arquivos CNAB
+
 

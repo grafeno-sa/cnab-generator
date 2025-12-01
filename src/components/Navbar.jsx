@@ -9,6 +9,8 @@ function Navbar() {
                 className='btn btn-link'>Gerar CNAB</Link>
           <Link to="/cnab-generator/csv"
                 className='btn btn-link'>Gerar CSV</Link>
+          <Link to="/cnab-generator/validate"
+                className='btn btn-link'>Validar CNAB</Link>
         </div>
       </div>
     </nav>

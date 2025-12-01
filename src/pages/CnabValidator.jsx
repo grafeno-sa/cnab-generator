@@ -6,7 +6,7 @@ function CnabValidator() {
   const [validationResult, setValidationResult] = useState(null);
   const [fileName, setFileName] = useState('');
 
-  const validateCnabFile = (content, filename) => {
+  const validateCnabFile = (content) => {
     const errors = [];
     const details = [];
     
@@ -74,12 +74,12 @@ function CnabValidator() {
 
     // Check header (first line must start with '0')
     if (lines[0][0] !== '0') {
-      errors.push(`Header inválido: primeira linha deve começar com '0', mas começa com '${lines[0][0]}'`);
+      errors.push(`Header inválido: primeira linha deve começar com &apos;0&apos;, mas começa com &apos;${lines[0][0]}&apos;`);
     }
 
     // Check trailer (last line must start with '9')
     if (lines[lines.length - 1][0] !== '9') {
-      errors.push(`Trailer inválido: última linha deve começar com '9', mas começa com '${lines[lines.length - 1][0]}'`);
+      errors.push(`Trailer inválido: última linha deve começar com &apos;9&apos;, mas começa com &apos;${lines[lines.length - 1][0]}&apos;`);
     }
 
     const isValid = errors.length === 0;
@@ -223,8 +223,8 @@ function CnabValidator() {
               <li>O arquivo deve ter extensão .txt ou .rem</li>
               <li>Todas as linhas devem ter exatamente 400 ou 444 caracteres</li>
               <li>Todas as linhas devem ter o mesmo tamanho</li>
-              <li>A primeira linha (header) deve começar com '0'</li>
-              <li>A última linha (trailer) deve começar com '9'</li>
+              <li>A primeira linha (header) deve começar com &apos;0&apos;</li>
+              <li>A última linha (trailer) deve começar com &apos;9&apos;</li>
             </ul>
           </div>
         </div>

@@ -1,7 +1,22 @@
 import PropTypes from 'prop-types';
+import Accordeon from '../../Accordeon';
 
 function ValidationResult({ result }) {
   if (!result) return null;
+
+  // Parse details to extract summary and line numbers
+  const parseDetail = (detail) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(detail, 'text/html');
+    const strongText = doc.querySelector('strong')?.textContent || '';
+    const fullText = doc.body.textContent || '';
+    const linesText = fullText.replace(strongText, '').trim();
+    
+    return {
+      summary: strongText,
+      lines: linesText
+    };
+  };
 
   return (
     <div className="row">
@@ -30,11 +45,16 @@ function ValidationResult({ result }) {
           {result.details.length > 0 && (
             <div className="validation-warnings">
               <h4>Detalhes:</h4>
-              <ul>
-                {result.details.map((detail, index) => (
-                  <li key={index} dangerouslySetInnerHTML={{ __html: detail }}></li>
-                ))}
-              </ul>
+              {result.details.map((detail, index) => {
+                const { summary, lines } = parseDetail(detail);
+                return (
+                  <Accordeon 
+                    key={index}
+                    title={summary}
+                    content={<p style={{ margin: 0 }}>{lines}</p>}
+                  />
+                );
+              })}
             </div>
           )}
         </div>

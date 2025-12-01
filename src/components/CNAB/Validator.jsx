@@ -1,4 +1,4 @@
-const CnabValidator = (content) => {
+const CnabValidator = (content, expectedSizes = [400, 444]) => {
   const errors = [];
   const details = [];
   
@@ -14,14 +14,14 @@ const CnabValidator = (content) => {
   const lineSizes = lines.map(line => line.length);
   const uniqueSizes = [...new Set(lineSizes)];
   
-  // Check if all lines have valid size (400 or 444)
-  const invalidSizes = uniqueSizes.filter(size => size !== 400 && size !== 444);
+  // Check if all lines have valid size
+  const invalidSizes = uniqueSizes.filter(size => !expectedSizes.includes(size));
   if (invalidSizes.length > 0) {
-    errors.push(`Tamanhos de linha inválidos encontrados: ${invalidSizes.join(', ')}. Apenas 400 ou 444 caracteres são permitidos.`);
+    errors.push(`Tamanhos de linha inválidos encontrados: ${invalidSizes.join(', ')}. Apenas ${expectedSizes.join(' ou ')} caracteres são permitidos.`);
     // Group lines by their size
     const linesBySize = {};
     lines.forEach((line, index) => {
-      if (line.length !== 400 && line.length !== 444) {
+      if (!expectedSizes.includes(line.length)) {
         if (!linesBySize[line.length]) {
           linesBySize[line.length] = [];
         }
@@ -31,13 +31,12 @@ const CnabValidator = (content) => {
     // Create grouped details
     Object.keys(linesBySize).sort((a, b) => a - b).forEach(size => {
       const lineNumbers = linesBySize[size];
-      details.push(`<strong>${lineNumbers.length} linha(s) com ${size} caracteres (esperado: 400 ou 444):</strong> Linhas ${lineNumbers.join(', ')}`);
+      details.push(`<strong>${lineNumbers.length} linha(s) com ${size} caracteres (esperado: ${expectedSizes.join(' ou ')}):</strong> Linhas ${lineNumbers.join(', ')}`);
     });
   }
 
   // Check if all lines have the same size
   if (uniqueSizes.length > 1 && invalidSizes.length === 0) {
-    // Only show this error if all sizes are valid (400 or 444) but inconsistent
     errors.push(`Todas as linhas devem ter o mesmo tamanho. Tamanhos encontrados: ${uniqueSizes.join(', ')}`);
     // Determine the most common size to use as expected
     const sizeCounts = {};
@@ -69,7 +68,6 @@ const CnabValidator = (content) => {
     errors.push(`Header inválido: primeira linha deve começar com &apos;0&apos;, mas começa com &apos;${lines[0][0]}&apos;`);
   }
 
-  // Check trailer (last line must start with '9')
   if (lines[lines.length - 1][0] !== '9') {
     errors.push(`Trailer inválido: última linha deve começar com &apos;9&apos;, mas começa com &apos;${lines[lines.length - 1][0]}&apos;`);
   }

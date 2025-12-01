@@ -67,11 +67,17 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
         } else if (REQUIRES_REGISTER_1 && REQUIRES_REGISTER_1.includes(lineId)) {
           // Check if register 2, 3, or 7 has a preceding register 1
           if (lastRegister1Index === -1 || lastRegister1Index < index - 1 - seenRegistersAfterLast1.size) {
-            sequenceErrors.push(`Linha ${lineNumber}: Registro '${lineId}' deve ser precedido por um registro '1'`);
+            sequenceErrors.push({
+              type: 'missing_register_1',
+              message: `Linha ${lineNumber}: Registro '${lineId}' deve ser precedido por um registro '1'`
+            });
           }
           // Check for repetition (register already seen after last 1)
           if (seenRegistersAfterLast1.has(lineId)) {
-            sequenceErrors.push(`Linha ${lineNumber}: Registro '${lineId}' está duplicado (apenas registro '1' pode repetir)`);
+            sequenceErrors.push({
+              type: 'duplicate',
+              message: `Linha ${lineNumber}: Registro '${lineId}' está duplicado`
+            });
           }
           seenRegistersAfterLast1.add(lineId);
         }
@@ -127,9 +133,18 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
   // Report sequence errors
   if (sequenceErrors.length > 0) {
     errors.push(`Erros de sequência: ${sequenceErrors.length} problema(s) de ordenação ou duplicação de registros`);
-    sequenceErrors.forEach(error => {
-      details.push(`<strong>Erro de sequência:</strong> ${error}`);
-    });
+    
+    // Group errors by type
+    const missingRegister1Errors = sequenceErrors.filter(e => e.type === 'missing_register_1').map(e => e.message);
+    const duplicateErrors = sequenceErrors.filter(e => e.type === 'duplicate').map(e => e.message);
+    
+    if (missingRegister1Errors.length > 0) {
+      details.push(`<strong>Registros sem registro '1' precedente (${missingRegister1Errors.length}):</strong> ${missingRegister1Errors.join('<br>')}`);
+    }
+    
+    if (duplicateErrors.length > 0) {
+      details.push(`<strong>Registros duplicados (${duplicateErrors.length}):</strong> ${duplicateErrors.join('<br>')}`);
+    }
   }
 
   const isValid = errors.length === 0;

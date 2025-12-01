@@ -9,12 +9,19 @@ function ValidationResult({ result }) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(detail, 'text/html');
     const strongText = doc.querySelector('strong')?.textContent || '';
-    const fullText = doc.body.textContent || '';
-    const linesText = fullText.replace(strongText, '').trim();
+    
+    // Remove the strong element to get the rest of the content
+    const strongElement = doc.querySelector('strong');
+    if (strongElement) {
+      strongElement.remove();
+    }
+    
+    // Get the remaining HTML with line breaks preserved
+    const linesHtml = doc.body.innerHTML.trim();
     
     return {
       summary: strongText,
-      lines: linesText
+      lines: linesHtml
     };
   };
 
@@ -52,7 +59,7 @@ function ValidationResult({ result }) {
                     <Accordeon 
                       key={index}
                       title={summary}
-                      content={<p style={{ margin: 0 }}>{lines}</p>}
+                      content={<p style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: lines }} />}
                       containerStyle={{
                         border: '1px solid #856404',
                         borderRadius: '5px',

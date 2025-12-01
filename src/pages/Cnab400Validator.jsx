@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Toast } from '../vendors/swal/toast';
 import CnabValidator from '../components/CNAB/Validator';
 import FileUpload from '../components/CNAB/FileUpload';
-import ValidationResult from '../components/CNAB/ValidationResult';
-import ValidationRules from '../components/CNAB/ValidationRules';
+import Result from '../components/CNAB/validation/Result';
+import Rules from '../components/CNAB/validation/Rules';
 import '../styles/components/CnabValidator.css';
 
 function Cnab400Validator() {
@@ -60,9 +60,9 @@ function Cnab400Validator() {
         </div>
       </div>
 
-      <ValidationResult result={validationResult} />
+      <Result result={validationResult} />
 
-      <ValidationRules rules={validationRules} />
+      <Rules rules={validationRules} />
     </div>
   );
 }

@@ -6,7 +6,6 @@ function FileUpload({ onFileLoaded, fileName, setFileName }) {
     
     if (!file) return;
 
-    // Check file extension
     const fileExtension = file.name.split('.').pop().toLowerCase();
     if (fileExtension !== 'txt' && fileExtension !== 'rem') {
       Toast.fire({

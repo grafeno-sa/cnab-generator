@@ -37,7 +37,9 @@ function Cnab400Validator() {
     'Todas as linhas devem ter o mesmo tamanho',
     'A primeira linha (header) deve começar com &apos;0&apos;',
     'A última linha (trailer) deve começar com &apos;9&apos;',
-    'As linhas intermediárias (registros) devem começar com &apos;1&apos;, &apos;2&apos;, &apos;3&apos; ou &apos;7&apos;'
+    'As linhas intermediárias (registros) devem começar com &apos;1&apos;, &apos;2&apos;, &apos;3&apos; ou &apos;7&apos;',
+    'Registros &apos;2&apos;, &apos;3&apos; e &apos;7&apos; devem ser precedidos por um registro &apos;1&apos;',
+    'Registros não podem se repetir (exceto registro &apos;1&apos; que pode repetir)'
   ];
 
   return (

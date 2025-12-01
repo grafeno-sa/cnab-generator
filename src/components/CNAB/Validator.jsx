@@ -11,7 +11,7 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
     return { isValid: false, errors, details };
   }
 
-  const { HEADER, TRAILER, VALID_REGISTERS } = lineIds;
+  const { HEADER, TRAILER, VALID_REGISTERS, REQUIRES_REGISTER_1 } = lineIds;
   
   // Split content into lines
   const lines = content.split('\n').filter(line => line.length > 0);
@@ -25,6 +25,9 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
   const lineSizes = [];
   const linesBySize = {};
   const invalidRegisterLines = [];
+  const sequenceErrors = [];
+  let lastRegister1Index = -1;
+  const seenRegistersAfterLast1 = new Set();
   
   lines.forEach((line, index) => {
     const lineNumber = index + 1;
@@ -53,8 +56,26 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
     }
     
     // Check middle lines (registers)
-    if (index > 0 && index < lines.length - 1 && VALID_REGISTERS && !VALID_REGISTERS.includes(lineId)) {
-      invalidRegisterLines.push(lineNumber);
+    if (index > 0 && index < lines.length - 1) {
+      if (VALID_REGISTERS && !VALID_REGISTERS.includes(lineId)) {
+        invalidRegisterLines.push(lineNumber);
+      } else if (VALID_REGISTERS && VALID_REGISTERS.includes(lineId)) {
+        // Validate register sequences
+        if (lineId === '1') {
+          lastRegister1Index = index;
+          seenRegistersAfterLast1.clear();
+        } else if (REQUIRES_REGISTER_1 && REQUIRES_REGISTER_1.includes(lineId)) {
+          // Check if register 2, 3, or 7 has a preceding register 1
+          if (lastRegister1Index === -1 || lastRegister1Index < index - 1 - seenRegistersAfterLast1.size) {
+            sequenceErrors.push(`Linha ${lineNumber}: Registro '${lineId}' deve ser precedido por um registro '1'`);
+          }
+          // Check for repetition (register already seen after last 1)
+          if (seenRegistersAfterLast1.has(lineId)) {
+            sequenceErrors.push(`Linha ${lineNumber}: Registro '${lineId}' está duplicado (apenas registro '1' pode repetir)`);
+          }
+          seenRegistersAfterLast1.add(lineId);
+        }
+      }
     }
   });
   
@@ -101,6 +122,14 @@ const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) =>
   if (invalidRegisterLines.length > 0) {
     errors.push(`Registros inválidos: ${invalidRegisterLines.length} linha(s) com identificador inválido. Valores permitidos: ${VALID_REGISTERS.join(', ')}`);
     details.push(`<strong>${invalidRegisterLines.length} linha(s) com identificador de registro inválido (esperado: ${VALID_REGISTERS.join(', ')}):</strong> Linhas ${invalidRegisterLines.join(', ')}`);
+  }
+  
+  // Report sequence errors
+  if (sequenceErrors.length > 0) {
+    errors.push(`Erros de sequência: ${sequenceErrors.length} problema(s) de ordenação ou duplicação de registros`);
+    sequenceErrors.forEach(error => {
+      details.push(`<strong>Erro de sequência:</strong> ${error}`);
+    });
   }
 
   const isValid = errors.length === 0;

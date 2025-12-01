@@ -65,11 +65,11 @@ const CnabValidator = (content, expectedSizes = [400, 444]) => {
 
   // Check header (first line must start with '0')
   if (lines[0][0] !== '0') {
-    errors.push(`Header inválido: primeira linha deve começar com &apos;0&apos;, mas começa com &apos;${lines[0][0]}&apos;`);
+    errors.push(`Header inválido: primeira linha deve começar com '0', mas começa com '${lines[0][0]}'`);
   }
 
   if (lines[lines.length - 1][0] !== '9') {
-    errors.push(`Trailer inválido: última linha deve começar com &apos;9&apos;, mas começa com &apos;${lines[lines.length - 1][0]}&apos;`);
+    errors.push(`Trailer inválido: última linha deve começar com '9', mas começa com '${lines[lines.length - 1][0]}'`);
   }
 
   const isValid = errors.length === 0;

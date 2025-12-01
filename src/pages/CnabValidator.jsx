@@ -8,14 +8,14 @@ function CnabValidator() {
 
   const validateCnabFile = (content, filename) => {
     const errors = [];
-    const warnings = [];
+    const details = [];
     
     // Split content into lines
     const lines = content.split('\n').filter(line => line.length > 0);
     
     if (lines.length === 0) {
       errors.push('O arquivo está vazio');
-      return { isValid: false, errors, warnings };
+      return { isValid: false, errors, details };
     }
 
     // Check line sizes
@@ -36,10 +36,10 @@ function CnabValidator() {
           linesBySize[line.length].push(index + 1);
         }
       });
-      // Create grouped warnings
+      // Create grouped details
       Object.keys(linesBySize).sort((a, b) => a - b).forEach(size => {
         const lineNumbers = linesBySize[size];
-        warnings.push(`${lineNumbers.length} linha(s) com ${size} caracteres (esperado: 400 ou 444): Linhas ${lineNumbers.join(', ')}`);
+        details.push(`<strong>${lineNumbers.length} linha(s) com ${size} caracteres (esperado: 400 ou 444):</strong> Linhas ${lineNumbers.join(', ')}`);
       });
     }
 
@@ -65,10 +65,10 @@ function CnabValidator() {
           linesBySize[line.length].push(index + 1);
         }
       });
-      // Create grouped warnings
+      // Create grouped details
       Object.keys(linesBySize).sort((a, b) => a - b).forEach(size => {
         const lineNumbers = linesBySize[size];
-        warnings.push(`${lineNumbers.length} linha(s) com ${size} caracteres (esperado: ${expectedSize}): Linhas ${lineNumbers.join(', ')}`);
+        details.push(`<strong>${lineNumbers.length} linha(s) com ${size} caracteres (esperado: ${expectedSize}):</strong> Linhas ${lineNumbers.join(', ')}`);
       });
     }
 
@@ -87,7 +87,7 @@ function CnabValidator() {
     return {
       isValid,
       errors,
-      warnings,
+      details,
       lineCount: lines.length,
       lineSize: uniqueSizes[0] || 'inconsistente'
     };
@@ -195,12 +195,12 @@ function CnabValidator() {
                 </div>
               )}
 
-              {validationResult.warnings.length > 0 && (
+              {validationResult.details.length > 0 && (
                 <div className="validation-warnings">
-                  <h4>Avisos:</h4>
+                  <h4>Detalhes:</h4>
                   <ul>
-                    {validationResult.warnings.map((warning, index) => (
-                      <li key={index}>{warning}</li>
+                    {validationResult.details.map((detail, index) => (
+                      <li key={index} dangerouslySetInnerHTML={{ __html: detail }}></li>
                     ))}
                   </ul>
                 </div>

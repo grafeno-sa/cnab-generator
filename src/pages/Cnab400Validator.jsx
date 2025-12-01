@@ -30,7 +30,7 @@ function Cnab400Validator() {
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target.result;
-      const result = CnabValidator(content, [400, 444]);
+      const result = CnabValidator(content, '400', [400, 444]);
       setValidationResult(result);
 
       if (result.isValid) {

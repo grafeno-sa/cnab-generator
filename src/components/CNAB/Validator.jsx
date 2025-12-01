@@ -1,6 +1,17 @@
-const CnabValidator = (content, expectedSizes = [400, 444]) => {
+import { LINE_IDS } from '../../scripts/CNAB/lineId.js';
+
+const CnabValidator = (content, cnabType = '400', expectedSizes = [400, 444]) => {
   const errors = [];
   const details = [];
+  
+  // Get line ID constants for the specified CNAB type
+  const lineIds = LINE_IDS[cnabType];
+  if (!lineIds) {
+    errors.push(`Tipo de CNAB não suportado: ${cnabType}`);
+    return { isValid: false, errors, details };
+  }
+
+  const { HEADER, TRAILER } = lineIds;
   
   // Split content into lines
   const lines = content.split('\n').filter(line => line.length > 0);
@@ -63,13 +74,14 @@ const CnabValidator = (content, expectedSizes = [400, 444]) => {
     });
   }
 
-  // Check header (first line must start with '0')
-  if (lines[0][0] !== '0') {
-    errors.push(`Header inválido: primeira linha deve começar com '0', mas começa com '${lines[0][0]}'`);
+  // Check header (first line must start with HEADER)
+  if (lines[0][0] !== HEADER) {
+    errors.push(`Header inválido: primeira linha deve começar com '${HEADER}', mas começa com '${lines[0][0]}'`);
   }
 
-  if (lines[lines.length - 1][0] !== '9') {
-    errors.push(`Trailer inválido: última linha deve começar com '9', mas começa com '${lines[lines.length - 1][0]}'`);
+  // Check trailer (last line must start with TRAILER)
+  if (lines[lines.length - 1][0] !== TRAILER) {
+    errors.push(`Trailer inválido: última linha deve começar com '${TRAILER}', mas começa com '${lines[lines.length - 1][0]}'`);
   }
 
   const isValid = errors.length === 0;

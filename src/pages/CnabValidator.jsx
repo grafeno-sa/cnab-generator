@@ -106,10 +106,12 @@ function CnabValidator() {
         title: 'Tipo de arquivo inválido',
         text: 'Por favor, selecione um arquivo .txt ou .rem'
       });
+      event.target.value = null; // Reset input
       return;
     }
 
     setFileName(file.name);
+    setValidationResult(null); // Reset previous validation result
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -133,6 +135,9 @@ function CnabValidator() {
     };
 
     reader.readAsText(file);
+    
+    // Reset the input so the same file can be uploaded again
+    event.target.value = null;
   };
 
   return (

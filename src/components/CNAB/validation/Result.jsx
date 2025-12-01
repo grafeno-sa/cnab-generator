@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 function ValidationResult({ result }) {
   if (!result) return null;
 
@@ -40,5 +42,15 @@ function ValidationResult({ result }) {
     </div>
   );
 }
+
+ValidationResult.propTypes = {
+  result: PropTypes.shape({
+    isValid: PropTypes.bool.isRequired,
+    lineCount: PropTypes.number.isRequired,
+    lineSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    errors: PropTypes.arrayOf(PropTypes.string).isRequired,
+    details: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }),
+};
 
 export default ValidationResult;

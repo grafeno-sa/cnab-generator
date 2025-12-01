@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Toast } from '../../vendors/swal/toast';
 
 function FileUpload({ onFileLoaded, fileName, setFileName }) {
@@ -54,5 +55,11 @@ function FileUpload({ onFileLoaded, fileName, setFileName }) {
     </div>
   );
 }
+
+FileUpload.propTypes = {
+  onFileLoaded: PropTypes.func.isRequired,
+  fileName: PropTypes.string.isRequired,
+  setFileName: PropTypes.func.isRequired,
+};
 
 export default FileUpload;

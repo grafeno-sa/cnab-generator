@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 function ValidationRules({ rules }) {
   return (
     <div className="row mt-3">
@@ -14,5 +16,9 @@ function ValidationRules({ rules }) {
     </div>
   );
 }
+
+ValidationRules.propTypes = {
+  rules: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default ValidationRules;

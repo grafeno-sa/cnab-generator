@@ -47,7 +47,8 @@ function AccordionItem({
         style={defaultHeaderStyle}
         onClick={toggleItem}
       >
-        {`${icon()} ${title}`}
+        <span>{icon()} </span>
+        {title}
       </div>
 
       {isOpen && (
@@ -60,7 +61,7 @@ function AccordionItem({
 }
 
 AccordionItem.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   content: PropTypes.any.isRequired,
   containerStyle: PropTypes.object,
   headerStyle: PropTypes.object,

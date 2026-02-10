@@ -59,6 +59,8 @@ function Cnab400Validator() {
             onFileLoaded={handleFileLoaded}
             fileName={fileName}
             setFileName={setFileName}
+            buttonText="Selecionar Arquivo"
+            buttonTextWithFile="Validar Outro Arquivo"
           />
         </div>
       </div>

@@ -1,18 +1,26 @@
 import PropTypes from 'prop-types';
 import { Toast } from '../../vendors/swal/toast';
 
-function FileUpload({ onFileLoaded, fileName, setFileName }) {
+function FileUpload({ 
+  onFileLoaded, 
+  fileName, 
+  setFileName, 
+  acceptedExtensions = ['txt', 'rem'],
+  buttonText = 'Selecionar Arquivo',
+  buttonTextWithFile = 'Selecionar Outro Arquivo'
+}) {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     
     if (!file) return;
 
     const fileExtension = file.name.split('.').pop().toLowerCase();
-    if (fileExtension !== 'txt' && fileExtension !== 'rem') {
+    if (!acceptedExtensions.includes(fileExtension)) {
+      const extensionList = acceptedExtensions.map(ext => `.${ext}`).join(', ');
       Toast.fire({
         icon: 'error',
         title: 'Tipo de arquivo inválido',
-        text: 'Por favor, selecione um arquivo .txt ou .rem'
+        text: `Por favor, selecione um arquivo ${extensionList}`
       });
       event.target.value = null; // Reset input
       return;
@@ -32,11 +40,13 @@ function FileUpload({ onFileLoaded, fileName, setFileName }) {
     event.target.value = null;
   };
 
+  const acceptAttribute = acceptedExtensions.map(ext => `.${ext}`).join(',');
+
   return (
     <div className="file-upload-section">
       <input
         type="file"
-        accept=".txt,.rem"
+        accept={acceptAttribute}
         onChange={handleFileUpload}
         style={{ display: 'none' }}
         id="cnab-file-input"
@@ -45,7 +55,7 @@ function FileUpload({ onFileLoaded, fileName, setFileName }) {
         htmlFor="cnab-file-input" 
         className="file-upload-label"
       >
-        {fileName ? 'Validar Outro Arquivo' : 'Selecionar Arquivo'}
+        {fileName ? buttonTextWithFile : buttonText}
       </label>
       {fileName && (
         <p className="file-name-display">
@@ -60,6 +70,9 @@ FileUpload.propTypes = {
   onFileLoaded: PropTypes.func.isRequired,
   fileName: PropTypes.string.isRequired,
   setFileName: PropTypes.func.isRequired,
+  acceptedExtensions: PropTypes.arrayOf(PropTypes.string),
+  buttonText: PropTypes.string,
+  buttonTextWithFile: PropTypes.string,
 };
 
 export default FileUpload;

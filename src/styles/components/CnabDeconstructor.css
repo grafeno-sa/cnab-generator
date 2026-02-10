@@ -1,0 +1,157 @@
+/* CnabDeconstructor Styles */
+
+.cnab-deconstructor__title {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.cnab-deconstructor__subtitle {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Summary Section */
+.cnab-summary {
+  margin-top: 1rem;
+}
+
+.cnab-summary p {
+  margin: 0.5rem 0;
+}
+
+.cnab-summary__warning {
+  color: var(--danger-color);
+}
+
+/* Line Details */
+.line-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.line-title__indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.line-title__indicator--header {
+  background-color: #4CAF50;
+}
+
+.line-title__indicator--registro1 {
+  background-color: #2196F3;
+}
+
+.line-title__indicator--registro2 {
+  background-color: #FF9800;
+}
+
+.line-title__indicator--registro3 {
+  background-color: #9C27B0;
+}
+
+.line-title__indicator--registro7 {
+  background-color: #00BCD4;
+}
+
+.line-title__indicator--trailer {
+  background-color: #F44336;
+}
+
+.line-title__indicator--unknown {
+  background-color: #9E9E9E;
+}
+
+.line-title__error {
+  color: red;
+}
+
+/* Line Details Content */
+.line-details {
+  padding: 15px;
+}
+
+.line-details__error {
+  color: red;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: var(--bg-error-light);
+  border-radius: 4px;
+}
+
+.line-details__section {
+  margin-bottom: 15px;
+}
+
+.line-details__label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Fields Table */
+.fields-table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.fields-table__header {
+  background-color: var(--border-color);
+}
+
+.fields-table th,
+.fields-table td {
+  padding: 8px;
+  border: 1px solid var(--border-color-dark);
+  text-align: left;
+}
+
+.fields-table th {
+  font-weight: bold;
+}
+
+.fields-table__cell--center {
+  text-align: center;
+}
+
+.fields-table__cell--monospace {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.fields-table__cell--description {
+  font-size: 13px;
+}
+
+.fields-table__row--even {
+  background-color: #fff;
+}
+
+.fields-table__row--odd {
+  background-color: var(--bg-light);
+}
+
+.fields-table__value {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.fields-table__value--filled {
+  font-weight: bold;
+}
+
+.fields-table__value--empty {
+  font-style: italic;
+  color: var(--muted-color);
+}
+
+.fields-table__raw-indicator {
+  color: var(--muted-color-lighter);
+  font-size: 11px;
+  margin-left: 8px;
+}
+

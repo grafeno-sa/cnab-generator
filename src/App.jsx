@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Cnab from './pages/Cnab';
 import Csv from './pages/Csv';
 import Cnab400Validator from './pages/Cnab400Validator';
+import CnabDeconstructor from './pages/CnabDeconstructor';
 
 import './App.css'
 import Layout from './components/Layout';
@@ -14,6 +15,7 @@ function App() {
         <Route index element={<Cnab />} />
         <Route path="/csv" element={<Csv />} />
         <Route path="/validate" element={<Cnab400Validator />} />
+        <Route path="/deconstructor" element={<CnabDeconstructor />} />
       </Route>
     </Routes>
   );

@@ -11,6 +11,8 @@ function Navbar() {
                 className='btn btn-link'>Gerar CSV</Link>
           <Link to="/validate"
                 className='btn btn-link'>Validar CNAB 400/444</Link>
+          <Link to="/deconstructor"
+                className='btn btn-link'>Desconstruir CNAB</Link>
         </div>
       </div>
     </nav>

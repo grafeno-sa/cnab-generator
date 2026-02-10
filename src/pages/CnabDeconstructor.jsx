@@ -4,6 +4,7 @@ import Accordeon from '../components/Accordeon';
 import FileUpload from '../components/CNAB/FileUpload';
 import { Toast } from '../vendors/swal/toast';
 import '../styles/components/CnabValidator.css';
+import '../styles/components/CnabDeconstructor.css';
 
 function CnabDeconstructor() {
   const [parsedData, setParsedData] = useState(null);
@@ -33,25 +34,12 @@ function CnabDeconstructor() {
     return labels[type] || type;
   };
 
-  const getLineTypeColor = (type) => {
-    const colors = {
-      header: '#4CAF50',
-      registro1: '#2196F3',
-      registro2: '#FF9800',
-      registro3: '#9C27B0',
-      registro7: '#00BCD4',
-      trailer: '#F44336',
-      unknown: '#9E9E9E'
-    };
-    return colors[type] || '#757575';
-  };
-
   return (
     <div className="container">
       <div className="row">
         <div className="col-12">
-          <h2 className="text-center mb-2">Desconstrutor CNAB 400/444</h2>
-          <p className="text-center mb-3">
+          <h2 className="cnab-deconstructor__title">Desconstrutor CNAB 400/444</h2>
+          <p className="cnab-deconstructor__subtitle">
             Faça upload de um arquivo .txt, .rem ou .ret para visualizar todos os campos detalhados
           </p>
         </div>
@@ -76,7 +64,7 @@ function CnabDeconstructor() {
             <div className="col-12">
               <div className="validation-rules">
                 <h4>Resumo do Arquivo</h4>
-                <div style={{ marginTop: '1rem' }}>
+                <div className="cnab-summary">
                   <p><strong>Total de Linhas:</strong> {parsedData.summary.totalLines}</p>
                   <p><strong>Header:</strong> {parsedData.summary.header}</p>
                   <p><strong>Trailer:</strong> {parsedData.summary.trailer}</p>
@@ -85,7 +73,7 @@ function CnabDeconstructor() {
                   <p><strong>Registro 3:</strong> {parsedData.summary.registro3}</p>
                   <p><strong>Registro 7:</strong> {parsedData.summary.registro7}</p>
                   {parsedData.summary.unknown > 0 && (
-                    <p style={{ color: '#dc3545' }}>
+                    <p className="cnab-summary__warning">
                       <strong>⚠️ Linhas Não Reconhecidas:</strong> {parsedData.summary.unknown}
                     </p>
                   )}
@@ -101,106 +89,64 @@ function CnabDeconstructor() {
                 <Accordeon 
                   key={index}
                   title={
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span style={{
-                        display: 'inline-block',
-                        width: '12px',
-                        height: '12px',
-                        borderRadius: '50%',
-                        backgroundColor: getLineTypeColor(line.lineType)
-                      }}></span>
+                    <div className="line-title">
+                      <span className={`line-title__indicator line-title__indicator--${line.lineType}`}></span>
                       <strong>Linha {line.lineNumber}:</strong>
                       <span>{getLineTypeLabel(line.lineType)}</span>
-                      {line.error && <span style={{ color: 'red' }}>⚠️</span>}
+                      {line.error && <span className="line-title__error">⚠️</span>}
                     </div>
                   }
                   content={
-                    <div className="line-details" style={{ padding: '15px' }}>
+                    <div className="line-details">
                     {line.error && (
-                      <div style={{ 
-                        color: 'red', 
-                        marginBottom: '15px',
-                        padding: '10px',
-                        backgroundColor: '#ffebee',
-                        borderRadius: '4px'
-                      }}>
+                      <div className="line-details__error">
                         <strong>Erro:</strong> {line.error}
                       </div>
                     )}
 
-                    <div style={{ marginBottom: '15px' }}>
-                      <strong>Linha Completa ({line.rawLine.length} caracteres):</strong>
-                      <div style={{ 
-                        marginTop: '5px',
-                        padding: '10px', 
-                        backgroundColor: '#f9f9f9',
-                        fontFamily: 'monospace',
-                        fontSize: '12px',
-                        overflowX: 'auto',
-                        border: '1px solid #e0e0e0',
-                        borderRadius: '4px'
-                      }}>
+                    <div className="line-details__section">
+                      <strong className="line-details__label">Linha Completa ({line.rawLine.length} caracteres):</strong>
+                      <div className="code-block">
                         {line.rawLine}
                       </div>
                     </div>
 
                     {line.fields.length > 0 && (
                       <div>
-                        <strong>Campos Extraídos:</strong>
-                        <table style={{ 
-                          width: '100%', 
-                          marginTop: '10px',
-                          borderCollapse: 'collapse'
-                        }}>
-                          <thead>
-                            <tr style={{ backgroundColor: '#e0e0e0' }}>
-                              <th style={{ padding: '8px', border: '1px solid #ccc', textAlign: 'left' }}>
+                        <strong className="line-details__label">Campos Extraídos:</strong>
+                        <table className="fields-table">
+                          <thead className="fields-table__header">
+                            <tr>
+                              <th>
                                 Campo
                               </th>
-                              <th style={{ padding: '8px', border: '1px solid #ccc', textAlign: 'left' }}>
+                              <th>
                                 Descrição
                               </th>
-                              <th style={{ padding: '8px', border: '1px solid #ccc', textAlign: 'center' }}>
+                              <th className="fields-table__cell--center">
                                 Posição
                               </th>
-                              <th style={{ padding: '8px', border: '1px solid #ccc', textAlign: 'left' }}>
+                              <th>
                                 Valor
                               </th>
                             </tr>
                           </thead>
                           <tbody>
                             {line.fields.map((field, fieldIndex) => (
-                              <tr key={fieldIndex} style={{ backgroundColor: fieldIndex % 2 === 0 ? '#fff' : '#f9f9f9' }}>
-                                <td style={{ 
-                                  padding: '8px', 
-                                  border: '1px solid #ccc',
-                                  fontFamily: 'monospace',
-                                  fontSize: '12px'
-                                }}>
+                              <tr key={fieldIndex} className={fieldIndex % 2 === 0 ? 'fields-table__row--even' : 'fields-table__row--odd'}>
+                                <td className="fields-table__cell--monospace">
                                   {field.name}
                                 </td>
-                                <td style={{ padding: '8px', border: '1px solid #ccc', fontSize: '13px' }}>
+                                <td className="fields-table__cell--description">
                                   {field.description}
                                 </td>
-                                <td style={{ 
-                                  padding: '8px', 
-                                  border: '1px solid #ccc', 
-                                  textAlign: 'center',
-                                  fontFamily: 'monospace',
-                                  fontSize: '12px'
-                                }}>
+                                <td className="fields-table__cell--center fields-table__cell--monospace">
                                   {field.startIndex}-{field.endIndex} ({field.length})
                                 </td>
-                                <td style={{ 
-                                  padding: '8px', 
-                                  border: '1px solid #ccc',
-                                  fontFamily: 'monospace',
-                                  fontSize: '12px',
-                                  fontWeight: field.display ? 'bold' : 'normal'
-                                }}>
-                                  {field.display || <em style={{ color: '#999' }}>(vazio)</em>}
+                                <td className={`fields-table__value ${field.display ? 'fields-table__value--filled' : ''}`}>
+                                  {field.display || <em className="fields-table__value--empty">(vazio)</em>}
                                   {field.raw !== field.display && (
-                                    <span style={{ color: '#666', fontSize: '11px', marginLeft: '8px' }}>
+                                    <span className="fields-table__raw-indicator">
                                       (raw: &quot;{field.raw}&quot;)
                                     </span>
                                   )}
@@ -222,7 +168,7 @@ function CnabDeconstructor() {
 
       {!parsedData && (
         <div className="row">
-          <div className="col-12 text-center" style={{ padding: '40px', color: '#999' }}>
+          <div className="col-12 empty-state">
             <p>Nenhum arquivo carregado. Selecione um arquivo CNAB para começar.</p>
           </div>
         </div>

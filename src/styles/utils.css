@@ -4,6 +4,12 @@
   --primary-color: #031633;
   --primary-color-lighter: #052c65;
   --muted-color-darker: #454545;
+  --muted-color: #999;
+  --muted-color-lighter: #666;
+  --bg-light: #f9f9f9;
+  --bg-error-light: #ffebee;
+  --border-color: #e0e0e0;
+  --border-color-dark: #ccc;
 }
 
 .container {
@@ -150,4 +156,27 @@
   display: flex;
   align-self: center;
   height: fit-content;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted-color);
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+/* Code Block / Monospace Display */
+.code-block {
+  margin-top: 5px;
+  padding: 10px;
+  background-color: var(--bg-light);
+  font-family: monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
 }

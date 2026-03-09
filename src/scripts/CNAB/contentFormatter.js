@@ -5,9 +5,17 @@ import { replaceSubstring } from "../replaceSubstring";
 
 const ContentFormatter = () => {
   const format = (generatedLines) => {
-    const header = generateLine({ type: 'header', generatedLines })
-    const trailer = generateLine({type: 'trailer', generatedLines })
-    const content = [header, ...generatedLines, trailer]
+    // Check if header and trailer already exist in the loaded lines
+    const hasHeader = generatedLines.some(line => line.type === 'header');
+    const hasTrailer = generatedLines.some(line => line.type === 'trailer');
+    
+    // Only generate header/trailer if they don't exist
+    const header = hasHeader ? null : generateLine({ type: 'header', generatedLines });
+    const trailer = hasTrailer ? null : generateLine({type: 'trailer', generatedLines });
+    
+    // Build content array, filtering out null values
+    const content = [header, ...generatedLines, trailer].filter(line => line !== null);
+    
     const formattedLines = content.map(generatedLine => formatLine(generatedLine))
 
     return formattedLines.join('\n')

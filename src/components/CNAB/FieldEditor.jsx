@@ -4,12 +4,14 @@ import Field from "../Field"
 import getLineFields from "../../scripts/CNAB/lineFields"
 import ContentEditor from "../../scripts/CNAB/contentEditor"
 import AccordionItem from "../Accordeon";
+import LineSelector from "./LineSelector";
 
 const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
-  const editableTypes = ['registro1', 'registro2', 'registro3', 'registro7']
+  const editableTypes = ['header', 'registro1', 'registro2', 'registro3', 'registro7', 'trailer']
   const [recordType, setRecordType] = useState('registro1')
   const [fieldOptions, setFieldOptions] = useState(getLineFields('registro1'))
   const [editedFields, setEditedFields] = useState([])
+  const [selectedLineIndex, setSelectedLineIndex] = useState(null)
 
   const selectHandler = (e) => {
     setFieldOptions(getLineFields(e.target.value))
@@ -27,6 +29,26 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
     setGeneratedLines(() => [...editedLines])
   }
 
+  const handleEditByIndex = () => {
+    if (selectedLineIndex === null) {
+      alert('Por favor, selecione uma linha primeiro');
+      return;
+    }
+    
+    if (!editedFields.length) {
+      alert('Por favor, preencha os campos que deseja editar');
+      return;
+    }
+    
+    const editedLines = ContentEditor().editByIndex({ 
+      generatedLines, 
+      editedFields, 
+      lineIndex: selectedLineIndex 
+    });
+    setGeneratedLines(() => [...editedLines]);
+    setEditedFields([]);
+  }
+
   const handleEditLastLine = () => {
     const editedLines = ContentEditor().deleteLast({ generatedLines, editedFields, recordType })
     setGeneratedLines(() => [...editedLines])
@@ -37,6 +59,17 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
 
     return (
       <>
+        <LineSelector
+          generatedLines={generatedLines}
+          selectedLineIndex={selectedLineIndex}
+          setSelectedLineIndex={setSelectedLineIndex}
+          onLineSelected={(lineType) => {
+            setRecordType(lineType);
+            setFieldOptions(getLineFields(lineType));
+            setEditedFields([]);
+          }}
+        />
+        
         <div className="row mb-3">
           <select
             onChange={selectHandler}
@@ -52,6 +85,12 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
             onClick={handleEditLast}
             className="btn btn-danger">
             Editar o último {recordType}
+          </button>
+          <button
+            onClick={handleEditByIndex}
+            className="btn btn-primary"
+            disabled={selectedLineIndex === null}>
+            Editar linha selecionada
           </button>
           <button
             onClick={handleEditLastLine}

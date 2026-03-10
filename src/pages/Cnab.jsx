@@ -5,12 +5,58 @@ import Preview from '../components/Preview';
 import FieldEditor from '../components/CNAB/FieldEditor';
 import ContentFormatter from "../scripts/CNAB/contentFormatter";
 import Downloader from '../components/Downloader';
+import FileUpload from '../components/CNAB/FileUpload';
+import convertFileToLines from '../scripts/CNAB/fileToLinesConverter';
+import { Toast } from '../vendors/swal/toast';
 
 function Cnab() {
   const [generatedLines, setGeneratedLines] = useState([])
+  const [fileName, setFileName] = useState('')
+
+  const handleFileLoaded = (fileContent) => {
+    try {
+      const lines = convertFileToLines(fileContent);
+      
+      if (lines.length === 0) {
+        Toast.fire({
+          icon: 'warning',
+          title: 'Arquivo vazio ou formato inválido'
+        });
+        return;
+      }
+      
+      setGeneratedLines(lines);
+      
+      Toast.fire({
+        icon: 'success',
+        title: `${lines.length} linhas carregadas com sucesso!`
+      });
+    } catch (error) {
+      console.error('Error loading file:', error);
+      Toast.fire({
+        icon: 'error',
+        title: 'Erro ao carregar arquivo',
+        text: 'Verifique se o arquivo está no formato correto'
+      });
+    }
+  }
 
   return (
     <>
+      <div className="row mb-4">
+        <div className="col-12">
+          <h3 className="mb-3">Carregar Arquivo CNAB</h3>
+          <FileUpload
+            onFileLoaded={handleFileLoaded}
+            fileName={fileName}
+            setFileName={setFileName}
+            acceptedExtensions={['txt', 'rem', 'ret']}
+            buttonText="Carregar Arquivo CNAB"
+            buttonTextWithFile="Carregar Outro Arquivo"
+          />
+        </div>
+      </div>
+
       <div className="row">
         <p className='bold text-center ml-2'>Registro 1</p>
       </div>

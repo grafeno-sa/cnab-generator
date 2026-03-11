@@ -3,6 +3,8 @@
   <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000" />
 </p>
 
+[![Node](https://img.shields.io/badge/v24.14%2B-339933.svg?logo=Node.js&logoColor=white)](https://nodejs.org/en/download/archive/v24.14.0)
+
 ### ✨ [Acesse: https://grafeno-sa.github.io/cnab-generator](https://grafeno-sa.github.io/cnab-generator/)
 
 ## Install

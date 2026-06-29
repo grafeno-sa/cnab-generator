@@ -206,7 +206,16 @@ const REGISTRO1_FIELDS = [
     paddingType: '0'
   },
   {
-    name: "documentoSacado",                                                                                                   
+    name: 'codigoInscricaoSacado',
+    description: 'Identificação do Tipo de Inscrição do Pagador',
+    startIndex: 219,
+    endIndex: 220,
+    defaultValue: () => '',
+    maxLength: 2,
+    paddingType: '0'
+  },
+  {
+    name: "documentoSacado",
     description: "CPF/CNPJ do sacado",
     startIndex: 221,
     endIndex: 234,

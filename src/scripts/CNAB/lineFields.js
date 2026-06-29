@@ -85,6 +85,15 @@ const REGISTRO1_FIELDS = [
     paddingType: '0'
   },
   {
+    name: 'numeroControleCliente',
+    description: 'Número de Controle do Participante',
+    startIndex: 38,
+    endIndex: 62,
+    defaultValue: () => '',
+    maxLength: 25,
+    paddingType: ' '
+  },
+  {
     name: 'numBancoCobrador',
     description: 'Código do Banco Cobrador',
     startIndex: 63,

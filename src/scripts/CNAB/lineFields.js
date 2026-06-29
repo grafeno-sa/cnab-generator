@@ -210,7 +210,7 @@ const REGISTRO1_FIELDS = [
     description: 'Identificação do Tipo de Inscrição do Pagador',
     startIndex: 219,
     endIndex: 220,
-    defaultValue: () => '',
+    defaultValue: () => '02',
     maxLength: 2,
     paddingType: '0'
   },

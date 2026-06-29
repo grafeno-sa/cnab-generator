@@ -3,6 +3,16 @@ import getLineFields from './lineFields.js'
 
 const LINE_TYPES = ['header', 'registro1', 'registro2', 'registro3', 'registro7', 'trailer']
 
+// Fields whose defaultValue is non-deterministic (random, date, or requires
+// populated generatedLines). Excluded from default-value snapshot tests.
+const DYNAMIC_FIELDS = new Set([
+  'documentoSacado',          // random CNPJ
+  'documentoSacadorAvalista', // random CNPJ
+  'dataVencimento',           // current date
+  'valorTitulo',              // Math.random
+  'ourNumber',                // reads from generatedLines content in registro3
+])
+
 describe('lineFields', () => {
   LINE_TYPES.forEach(type => {
     describe(type, () => {
@@ -31,6 +41,17 @@ describe('lineFields', () => {
             expect(overlaps, `${a.name} overlaps ${b.name}`).toBe(false)
           }
         }
+      })
+
+      it('static default values match snapshot', () => {
+        const fields = getLineFields(type)
+        const staticDefaults = {}
+        fields
+          .filter(field => !DYNAMIC_FIELDS.has(field.name))
+          .forEach(field => {
+            staticDefaults[field.name] = field.defaultValue({ generatedLines: [] })
+          })
+        expect(staticDefaults).toMatchSnapshot()
       })
     })
   })

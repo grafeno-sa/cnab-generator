@@ -11,6 +11,8 @@ const Field = ({ field, setEditedFields }) => {
   }
 
   const updateEditedFields = (e) => {
+    if (e.target.value === '') return
+
     setEditedFields(prev => {
       if (!includesField(prev)) {
         const newEditedField = {

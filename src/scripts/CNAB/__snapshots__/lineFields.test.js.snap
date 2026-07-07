@@ -1,0 +1,87 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`lineFields > header > static default values match snapshot 1`] = `
+{
+  "bankNumber": "274",
+  "fundDocument": "02968340000489",
+  "serialNumber": 1,
+}
+`;
+
+exports[`lineFields > registro1 > static default values match snapshot 1`] = `
+{
+  "agenciaBeneficiario": "00001",
+  "cepSacado": "26321",
+  "codigoCarteira": "001",
+  "codigoInscricaoSacado": "02",
+  "complementoCepSacado": "530",
+  "contaBeneficiario": "12345671",
+  "enderecoSacado": "Rua Tudis Parque Ipanema",
+  "especieTitulo": "01",
+  "identificacaoOcorrencia": "01",
+  "informacaoMulta": "0",
+  "jurosAtraso": "",
+  "limiteDesconto": "",
+  "mensagem1Reg1": "mensagem 1",
+  "nomeSacadorAvalista": "Nome Sacador Avalista Genérico",
+  "nome_sacado": "pagador gerador cnab",
+  "numBancoCobrador": "310",
+  "numeroControleCliente": "",
+  "percentualMulta": "0",
+  "serialNumber": 2,
+  "valorAbatimento": "",
+  "valorDesconto": "",
+}
+`;
+
+exports[`lineFields > registro2 > static default values match snapshot 1`] = `
+{
+  "limiteDesconto2": "",
+  "limiteDesconto3": "",
+  "mensagem1": "pagador@email.com",
+  "mensagem2": "",
+  "mensagem3": "",
+  "mensagem4": "",
+  "serialNumber": 2,
+  "valorDesconto2": "",
+  "valorDesconto3": "",
+}
+`;
+
+exports[`lineFields > registro3 > static default values match snapshot 1`] = `
+{
+  "Account1": "016391732",
+  "Account2": "081875825",
+  "Account3": "081438079",
+  "beneficiaryIdentification": "00900001825346",
+  "clientName1": "EMPRESA DE ARTIGOS MAGICOS",
+  "clientName2": "EMPRESA DE ARTIGOS MALUCOS",
+  "clientName3": "EMPRESA DE ARTIGOS ENFERRUJADOS",
+  "firstReceiverBankCode": "274",
+  "percentageSplit1": "5",
+  "percentageSplit2": "5",
+  "percentageSplit3": "5",
+  "secondReceiverBankCode": "274",
+  "serialNumber": 2,
+  "thirdReceiverBankCode": "274",
+}
+`;
+
+exports[`lineFields > registro7 > static default values match snapshot 1`] = `
+{
+  "bairro": "Algum bairro",
+  "cep": "13905",
+  "cidade": "Bauru",
+  "complemento": "Algum complemento",
+  "endereco": "Rua Alguma Coisa",
+  "estado": "SP",
+  "serialNumber": 2,
+  "sufixoCep": "000",
+}
+`;
+
+exports[`lineFields > trailer > static default values match snapshot 1`] = `
+{
+  "serialNumber": 2,
+}
+`;

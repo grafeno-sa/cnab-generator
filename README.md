@@ -38,6 +38,7 @@ npm run deploy
 Para informações sobre como estender o projeto, consulte a documentação em `/docs`:
 
 ### Guias de Desenvolvimento
+- [Testes](docs/testes.md) - Suite de testes, como rodar, adicionar e atualizar snapshots
 - [Adicionando um Novo Validador CNAB](docs/adicionar-validador-cnab.md) - Guia completo para adicionar suporte a novos tipos de CNAB
 - [Adicionando Novos Campos CNAB](docs/adicionar-campos-cnab.md) - Como configurar e adicionar campos personalizados ao gerador CNAB
 - [Adicionando Novos Campos CSV](docs/adicionar-campos-csv.md) - Como configurar e adicionar campos personalizados ao gerador CSV

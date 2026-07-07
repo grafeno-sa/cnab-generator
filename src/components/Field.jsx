@@ -4,13 +4,17 @@ import { useState } from "react"
 const Field = ({ field, setEditedFields }) => {
   const [currentLength, setCurrentLength] = useState(0)
   const [value, setValue] = useState('')
+  const [touched, setTouched] = useState(false)
 
   const changeHandler = (e) => {
     setValue(e.target.value)
     setCurrentLength(e.target.value.length)
+    setTouched(true)
   }
 
   const updateEditedFields = (e) => {
+    if (!touched) return
+
     setEditedFields(prev => {
       if (!includesField(prev)) {
         const newEditedField = {

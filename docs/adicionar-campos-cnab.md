@@ -63,6 +63,7 @@ const TRAILER_FIELDS = [
 | `defaultValue` | Function | Função que retorna o valor padrão (string) | `() => '000001'` |
 | `maxLength` | Number | Quantidade de caracteres do campo | `6` |
 | `paddingType` | String | Tipo de preenchimento: `'0'` ou `' '` (espaço) | `'0'` |
+| `options` | Array | *(Opcional)* Lista de valores para renderizar o campo como selectbox | `OCORRENCIA_OPTIONS` |
 
 ### Cálculo de `maxLength`
 
@@ -192,6 +193,48 @@ Preenche com espaços à direita:
 // maxLength = 10, valor = "TESTE"
 // Resultado: "TESTE     "
 ```
+
+## Campos com Lista de Valores (Selectbox)
+
+Campos **codificados** (que aceitam apenas um conjunto fixo de códigos, como o código de ocorrência) podem declarar a propriedade opcional `options`. Quando presente, o `FieldEditor` renderiza o campo como um **selectbox** com descrições legíveis, em vez de um input de texto livre.
+
+### Formato das Opções
+
+Cada opção é um objeto `{ value, label }`:
+
+```javascript
+{
+  value: '09',                    // valor gravado na linha CNAB
+  label: '09 - Pedido de protesto' // texto exibido na UI
+}
+```
+
+### Onde Ficam as Traduções
+
+As listas de opções ficam em `src/scripts/CNAB/fieldTranslations.js`, portadas dos arquivos de tradução do layout Grafeno (`grafeno-pagamentos/.../layout_400/grafeno-translations.yml`).
+
+### Exemplo de Uso
+
+```javascript
+import { OCORRENCIA_OPTIONS } from './fieldTranslations';
+
+{
+  name: 'identificacaoOcorrencia',
+  description: 'Ocorrência',
+  startIndex: 109,
+  endIndex: 110,
+  defaultValue: () => '01',
+  maxLength: 2,
+  paddingType: '0',
+  options: OCORRENCIA_OPTIONS  // renderiza como selectbox
+}
+```
+
+### Notas
+
+- O selectbox inicia exibindo o `defaultValue` do campo. Se o usuário não interagir, o valor padrão é mantido na geração.
+- Para permitir **valor vazio**, inclua uma opção com `value: ''` na lista (ex: `{ value: '', label: '— não informar —' }`). Lembre-se de que o `paddingType` ainda se aplica: um campo numérico (`'0'`) com valor vazio é preenchido com zeros (ex: `00`).
+- Campos **sem** `options` continuam sendo inputs de texto — nenhuma mudança.
 
 ## Função `defaultValue`
 

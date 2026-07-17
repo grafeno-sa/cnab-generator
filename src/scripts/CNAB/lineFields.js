@@ -1,5 +1,6 @@
 import generateCleanCNPJ from '../generateCleanCNPJ';
 import generateFormattedDate from '../dateGenerator';
+import { OCORRENCIA_OPTIONS, INFORMACAO_MULTA_OPTIONS } from './fieldTranslations';
 
 const getLineFields = (type) => {
   const fields = {
@@ -109,7 +110,8 @@ const REGISTRO1_FIELDS = [
     endIndex: 66,
     defaultValue: () => '0',
     maxLength: 1,
-    paddingType: '0'
+    paddingType: '0',
+    options: INFORMACAO_MULTA_OPTIONS
   },
   {
     name: 'percentualMulta',
@@ -137,6 +139,7 @@ const REGISTRO1_FIELDS = [
     defaultValue: () => "01",
     maxLength: 2,
     paddingType: '0',
+    options: OCORRENCIA_OPTIONS
   },
   {
     name: "dataVencimento",

@@ -148,6 +148,13 @@
   width: 80%;
 }
 
+.field-select {
+  width: 80%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .w-100 {
   width: 100%;
 }

@@ -64,26 +64,6 @@ function Cnab() {
         <p className='bold text-center ml-2'>Registro 1</p>
       </div>
       <div className='row pb-2'>
-        <div className='col-3 flex-align-center'>
-          <input
-            type='checkbox'
-            id='gerarNN'
-            className='mr-2'
-            checked={gerarNN}
-            onChange={(e) => setGerarNN(e.target.checked)}/>
-          <label htmlFor='gerarNN'>Gerar NN</label>
-        </div>
-        <div className='col-3 flex-align-center'>
-          <input
-            type='checkbox'
-            id='multicedente'
-            className='mr-2'
-            checked={multicedente}
-            onChange={(e) => setMulticedente(e.target.checked)}/>
-          <label htmlFor='multicedente'>Multicedente</label>
-        </div>
-      </div>
-      <div className='row pb-2'>
         { [1, 10, 100, 1000, 15000, 50000].map(quantity => (
             <div className='col-3' key={quantity}>
               <LineGenerator
@@ -93,6 +73,29 @@ function Cnab() {
                 settings={registro1Settings}/>
             </div>
         )) }
+      </div>
+
+      <hr className='divider'/>
+
+      <div className='row pb-3'>
+        <div className='settings-panel'>
+          <div className='checkbox-inline'>
+            <input
+              type='checkbox'
+              id='gerarNN'
+              checked={gerarNN}
+              onChange={(e) => setGerarNN(e.target.checked)}/>
+            <label htmlFor='gerarNN'>Gerar NN</label>
+          </div>
+          <div className='checkbox-inline'>
+            <input
+              type='checkbox'
+              id='multicedente'
+              checked={multicedente}
+              onChange={(e) => setMulticedente(e.target.checked)}/>
+            <label htmlFor='multicedente'>Multicedente</label>
+          </div>
+        </div>
       </div>
 
       <div className="row">

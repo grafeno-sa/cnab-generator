@@ -190,7 +190,7 @@
   cursor: pointer;
 }
 
-.cedente-editor {
+.assignor-editor {
   width: 100%;
   margin: 15px;
   padding: 12px 16px;
@@ -199,18 +199,18 @@
   border-radius: 5px;
 }
 
-.cedente-row {
+.assignor-row {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
 }
 
-.cedente-row input[type='text'] {
+.assignor-row input[type='text'] {
   width: 120px;
 }
 
-.btn-remove-cedente {
+.btn-remove-assignor {
   margin: 0;
   padding: 4px 10px;
 }

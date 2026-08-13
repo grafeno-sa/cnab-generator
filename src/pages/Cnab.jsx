@@ -112,7 +112,9 @@ function Cnab() {
         <p className='bold text-center ml-2'>Configurações Adicionais</p>
       </div>
       <div className='row pb-2'>
-        <div className='checkbox-panel'>
+        <div
+          className='checkbox-panel'
+          title='Gera automaticamente o Nosso Número (base + dígito verificador) de cada registro1, usando o algoritmo do banco escolhido no header (ou o Código do Banco Cobrador da linha, se Multicedente estiver marcado). Desmarcado, o campo fica em branco pra edição manual.'>
           <input
             type='checkbox'
             id='gerarNN'
@@ -120,7 +122,9 @@ function Cnab() {
             onChange={(e) => setGerarNN(e.target.checked)}/>
           <label htmlFor='gerarNN'>Gerar NN</label>
         </div>
-        <div className='checkbox-panel'>
+        <div
+          className='checkbox-panel'
+          title='Ao gerar o NN, usa o Código do Banco Cobrador de cada linha (banco destino/conta beneficiário) em vez do banco definido no header.'>
           <input
             type='checkbox'
             id='multicedente'

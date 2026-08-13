@@ -175,6 +175,7 @@
   background-color: var(--bg-light);
   border: 1px solid var(--border-color);
   border-radius: 5px;
+  cursor: help;
 }
 
 .checkbox-panel input[type='checkbox'] {

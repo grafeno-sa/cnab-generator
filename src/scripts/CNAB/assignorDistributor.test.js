@@ -23,7 +23,7 @@ describe('AssignorDistributor', () => {
       const assignors = [{ banco: '310', conta: '1' }, { banco: '274', conta: '2' }, { banco: '310', conta: '3' }]
       const result = AssignorDistributor().validate({ generatedLines: buildRegistro1Lines(2), assignors })
       expect(result.valid).toBe(false)
-      expect(result.message).toContain('2 linhas para 3 assignors')
+      expect(result.message).toContain('2 linhas para 3 cedentes')
     })
 
     it('passes when there is at least one line per assignor and all contas are filled', () => {

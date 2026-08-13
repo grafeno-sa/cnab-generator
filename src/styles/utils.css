@@ -8,6 +8,7 @@
   --muted-color-lighter: #666;
   --bg-light: #f9f9f9;
   --bg-error-light: #ffebee;
+  --success-color: #2e7d32;
   --border-color: #e0e0e0;
   --border-color-dark: #ccc;
 }
@@ -208,6 +209,19 @@
 
 .assignor-row input[type='text'] {
   width: 120px;
+}
+
+.assignor-status {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.assignor-status.applied {
+  color: var(--success-color);
+}
+
+.assignor-status.pending {
+  color: var(--muted-color);
 }
 
 .btn-remove-assignor {

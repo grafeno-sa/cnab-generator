@@ -6,6 +6,14 @@ import { Toast } from '../../vendors/swal/toast'
 const DEFAULT_BANK_CODE = '310'
 
 const AssignorEditor = ({ assignors, setAssignors, generatedLines, setGeneratedLines, settings }) => {
+  // Status calculado a partir dos dados: existe alguma linha registro1 com
+  // esse banco+conta no arquivo agora? Não depende de "cliquei em Aplicar
+  // depois da última edição" — reflete o que está de fato gerado.
+  const isInGeneratedLines = (assignor) =>
+    generatedLines.some(line => line.type === 'registro1'
+      && line.numBancoCobrador === assignor.banco
+      && line.contaBeneficiario === assignor.conta)
+
   const addAssignor = () => {
     if (assignors.length >= MAX_ASSIGNORS) return
 
@@ -34,11 +42,11 @@ const AssignorEditor = ({ assignors, setAssignors, generatedLines, setGeneratedL
 
   return (
     <div className='assignor-editor'>
-      <p className='bold mb-3'>Assignors (Multicedente)</p>
+      <p className='bold mb-3'>Cedentes (Multicedente)</p>
 
       {assignors.map((assignor, index) => (
         <div className='assignor-row' key={index}>
-          <span>{`Assignor ${index + 1}`}</span>
+          <span>{`Cedente ${index + 1}`}</span>
 
           <select
             value={assignor.banco}
@@ -55,10 +63,14 @@ const AssignorEditor = ({ assignors, setAssignors, generatedLines, setGeneratedL
             value={assignor.conta}
             onChange={(e) => updateAssignor(index, 'conta', e.target.value)}/>
 
+          <span className={`assignor-status ${isInGeneratedLines(assignor) ? 'applied' : 'pending'}`}>
+            {isInGeneratedLines(assignor) ? '✓ No arquivo' : 'Não está no arquivo'}
+          </span>
+
           <button
             onClick={() => removeAssignor(index)}
             className='btn btn-danger btn-remove-assignor'
-            aria-label={`Remover assignor ${index + 1}`}>
+            aria-label={`Remover cedente ${index + 1}`}>
             x
           </button>
         </div>
@@ -69,7 +81,7 @@ const AssignorEditor = ({ assignors, setAssignors, generatedLines, setGeneratedL
           onClick={addAssignor}
           disabled={assignors.length >= MAX_ASSIGNORS}
           className='btn btn-light'>
-          Adicionar Assignor
+          Adicionar Cedente
         </button>
 
         <button

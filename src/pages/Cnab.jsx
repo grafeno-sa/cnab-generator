@@ -12,6 +12,9 @@ import { Toast } from '../vendors/swal/toast';
 function Cnab() {
   const [generatedLines, setGeneratedLines] = useState([])
   const [fileName, setFileName] = useState('')
+  const [gerarNN, setGerarNN] = useState(false)
+  const [multicedente, setMulticedente] = useState(false)
+  const registro1Settings = { gerarNN, multicedente }
 
   const handleFileLoaded = (fileContent) => {
     try {
@@ -61,12 +64,33 @@ function Cnab() {
         <p className='bold text-center ml-2'>Registro 1</p>
       </div>
       <div className='row pb-2'>
+        <div className='col-3 flex-align-center'>
+          <input
+            type='checkbox'
+            id='gerarNN'
+            className='mr-2'
+            checked={gerarNN}
+            onChange={(e) => setGerarNN(e.target.checked)}/>
+          <label htmlFor='gerarNN'>Gerar NN</label>
+        </div>
+        <div className='col-3 flex-align-center'>
+          <input
+            type='checkbox'
+            id='multicedente'
+            className='mr-2'
+            checked={multicedente}
+            onChange={(e) => setMulticedente(e.target.checked)}/>
+          <label htmlFor='multicedente'>Multicedente</label>
+        </div>
+      </div>
+      <div className='row pb-2'>
         { [1, 10, 100, 1000, 15000, 50000].map(quantity => (
             <div className='col-3' key={quantity}>
               <LineGenerator
                 type='registro1'
                 quantity={quantity}
-                stateHook={{generatedLines, setGeneratedLines}}/>
+                stateHook={{generatedLines, setGeneratedLines}}
+                settings={registro1Settings}/>
             </div>
         )) }
       </div>
@@ -77,11 +101,18 @@ function Cnab() {
       <div className="row">
         <div className='col-3'>
           <LineGenerator
+            type='header'
+            quantity={1}
+            stateHook={{generatedLines, setGeneratedLines}}/>
+        </div>
+
+        <div className='col-3'>
+          <LineGenerator
             type='registro2'
             quantity={1}
             stateHook={{generatedLines, setGeneratedLines}}/>
         </div>
-        
+
         <div className='col-3'>
           <LineGenerator
             type='registro3'

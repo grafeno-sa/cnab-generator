@@ -1,6 +1,12 @@
 import generateCleanCNPJ from '../generateCleanCNPJ';
 import generateFormattedDate from '../dateGenerator';
-import { OCORRENCIA_OPTIONS, INFORMACAO_MULTA_OPTIONS } from './fieldTranslations';
+import { OCORRENCIA_OPTIONS, INFORMACAO_MULTA_OPTIONS, BANK_OPTIONS } from './fieldTranslations';
+import generateOurNumber from './ourNumberGenerator';
+
+const DEFAULT_BANK_CODE = '274';
+
+const headerBankCode = (generatedLines) =>
+  generatedLines.find((line) => line.type === 'header')?.bankNumber || DEFAULT_BANK_CODE;
 
 const getLineFields = (type) => {
   const fields = {
@@ -45,6 +51,7 @@ const HEADER_FIELDS = [
     defaultValue: () => "274",
     maxLength: 3,
     paddingType: '0',
+    options: BANK_OPTIONS,
   },
   {
     name: 'serialNumber',
@@ -101,7 +108,8 @@ const REGISTRO1_FIELDS = [
     endIndex: 65,
     defaultValue: () => '310',
     maxLength: 3,
-    paddingType: '0'
+    paddingType: '0',
+    options: BANK_OPTIONS,
   },
   {
     name: 'informacaoMulta',
@@ -126,8 +134,13 @@ const REGISTRO1_FIELDS = [
     name: "ourNumber",
     description: "Nosso Número do Título",
     startIndex: 71,
-    endIndex: 82,    
-    defaultValue: () => '',
+    endIndex: 82,
+    defaultValue: ({ generatedLines, newLine, settings }) => {
+      if (!settings?.gerarNN) return '';
+
+      const bankCode = settings.multicedente ? newLine.numBancoCobrador : headerBankCode(generatedLines);
+      return generateOurNumber({ bankCode, generatedLines });
+    },
     maxLength: 12,
     paddingType: '0'
   },

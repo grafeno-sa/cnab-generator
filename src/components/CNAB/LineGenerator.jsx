@@ -4,7 +4,7 @@ import { Toast } from "../../vendors/swal/toast"
 import LineGenerationValidator from "../../scripts/CNAB/lineGenerationValidator"
 import generateLine from "../../scripts/CNAB/lineFactory"
 
-const LineGenerator = ({ type, quantity, stateHook }) => {
+const LineGenerator = ({ type, quantity, stateHook, settings }) => {
   const { generatedLines, setGeneratedLines } = stateHook
 
   const clickHandler = () => {
@@ -23,7 +23,7 @@ const LineGenerator = ({ type, quantity, stateHook }) => {
     for (let i = 1; i <= quantity; i++) {
       try{
         const lines = type === 'registro1' ? [...generatedLines, ...newLines] : generatedLines
-        const newLine = generateLine({ type, generatedLines: lines })
+        const newLine = generateLine({ type, generatedLines: lines, settings })
         newLines.push(newLine)
       }
       catch (e) {
@@ -54,7 +54,11 @@ LineGenerator.propTypes = {
   stateHook: PropTypes.shape({
     generatedLines: PropTypes.array.isRequired,
     setGeneratedLines: PropTypes.func.isRequired,
-  })
+  }),
+  settings: PropTypes.shape({
+    gerarNN: PropTypes.bool,
+    multicedente: PropTypes.bool,
+  }),
 };
 
 export default LineGenerator;

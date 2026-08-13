@@ -75,29 +75,6 @@ function Cnab() {
         )) }
       </div>
 
-      <hr className='divider'/>
-
-      <div className='row pb-3'>
-        <div className='settings-panel'>
-          <div className='checkbox-inline'>
-            <input
-              type='checkbox'
-              id='gerarNN'
-              checked={gerarNN}
-              onChange={(e) => setGerarNN(e.target.checked)}/>
-            <label htmlFor='gerarNN'>Gerar NN</label>
-          </div>
-          <div className='checkbox-inline'>
-            <input
-              type='checkbox'
-              id='multicedente'
-              checked={multicedente}
-              onChange={(e) => setMulticedente(e.target.checked)}/>
-            <label htmlFor='multicedente'>Multicedente</label>
-          </div>
-        </div>
-      </div>
-
       <div className="row">
         <p className='bold text-center ml-2'>Registros Complementares</p>
       </div>
@@ -128,6 +105,28 @@ function Cnab() {
             type='registro7'
             quantity={1}
             stateHook={{generatedLines, setGeneratedLines}}/>
+        </div>
+      </div>
+
+      <div className="row">
+        <p className='bold text-center ml-2'>Configurações Adicionais</p>
+      </div>
+      <div className='row pb-2'>
+        <div className='checkbox-panel'>
+          <input
+            type='checkbox'
+            id='gerarNN'
+            checked={gerarNN}
+            onChange={(e) => setGerarNN(e.target.checked)}/>
+          <label htmlFor='gerarNN'>Gerar NN</label>
+        </div>
+        <div className='checkbox-panel'>
+          <input
+            type='checkbox'
+            id='multicedente'
+            checked={multicedente}
+            onChange={(e) => setMulticedente(e.target.checked)}/>
+          <label htmlFor='multicedente'>Multicedente</label>
         </div>
       </div>
 

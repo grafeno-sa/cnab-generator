@@ -3,6 +3,7 @@ import LineGenerator from '../components/CNAB/LineGenerator';
 import Cleaner from '../components/Cleaner';
 import Preview from '../components/Preview';
 import FieldEditor from '../components/CNAB/FieldEditor';
+import CedenteEditor from '../components/CNAB/CedenteEditor';
 import ContentFormatter from "../scripts/CNAB/contentFormatter";
 import Downloader from '../components/Downloader';
 import FileUpload from '../components/CNAB/FileUpload';
@@ -14,6 +15,7 @@ function Cnab() {
   const [fileName, setFileName] = useState('')
   const [gerarNN, setGerarNN] = useState(false)
   const [multicedente, setMulticedente] = useState(false)
+  const [cedentes, setCedentes] = useState([])
   const registro1Settings = { gerarNN, multicedente }
 
   const handleFileLoaded = (fileContent) => {
@@ -133,6 +135,15 @@ function Cnab() {
           <label htmlFor='multicedente'>Multicedente</label>
         </div>
       </div>
+
+      { multicedente && (
+        <CedenteEditor
+          cedentes={cedentes}
+          setCedentes={setCedentes}
+          generatedLines={generatedLines}
+          setGeneratedLines={setGeneratedLines}
+          settings={registro1Settings}/>
+      ) }
 
       <div className='row flex-end'>
         <div className='col-12 container'>

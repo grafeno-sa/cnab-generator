@@ -190,6 +190,31 @@
   cursor: pointer;
 }
 
+.cedente-editor {
+  width: 100%;
+  margin: 15px;
+  padding: 12px 16px;
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+.cedente-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.cedente-row input[type='text'] {
+  width: 120px;
+}
+
+.btn-remove-cedente {
+  margin: 0;
+  padding: 4px 10px;
+}
+
 /* Empty State */
 .empty-state {
   text-align: center;

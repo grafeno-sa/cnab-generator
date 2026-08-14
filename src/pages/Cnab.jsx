@@ -9,10 +9,22 @@ import Downloader from '../components/Downloader';
 import FileUpload from '../components/CNAB/FileUpload';
 import convertFileToLines from '../scripts/CNAB/fileToLinesConverter';
 import recalculateOurNumbers from '../scripts/CNAB/headerBankRecalculator';
+import reorderHeaderAndTrailer from '../scripts/CNAB/headerTrailerOrder';
 import { Toast } from '../vendors/swal/toast';
 
 function Cnab() {
-  const [generatedLines, setGeneratedLines] = useState([])
+  const [generatedLines, setGeneratedLinesRaw] = useState([])
+
+  // Ponto único de escrita do estado: garante que header fique sempre na
+  // primeira posição e trailer na última, não importa de onde a mudança
+  // veio (LineGenerator, FieldEditor, upload de arquivo, distribuição de
+  // cedentes).
+  const setGeneratedLines = (updater) => {
+    setGeneratedLinesRaw((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      return reorderHeaderAndTrailer(next)
+    })
+  }
   const [fileName, setFileName] = useState('')
   const [gerarNN, setGerarNN] = useState(false)
   const [multicedente, setMulticedente] = useState(false)

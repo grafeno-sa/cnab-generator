@@ -29,6 +29,7 @@ flowchart TD
         OurNumberGenerator["CNAB Our Number Generator"]
         AssignorDistributor["CNAB Assignor Distributor"]
         HeaderBankRecalculator["CNAB Header Bank Recalculator"]
+        HeaderTrailerOrder["CNAB Header Trailer Order"]
 
         %% Sums
         Sum1["( )"]:::sum
@@ -69,6 +70,8 @@ flowchart TD
         AssignorDistributor -.-> OurNumberGenerator
         HeaderBankRecalculator -.-> CnabJsx
         HeaderBankRecalculator -.-> OurNumberGenerator
+        HeaderTrailerOrder -.-> CnabJsx
+        HeaderTrailerOrder -.-> ContentEditor
     end
 
     %% Style for "sum" symbols (optional, for clarity)
@@ -90,6 +93,7 @@ Componente principal da página de geração CNAB. Orquestra todos os outros com
 - Gerenciar as configurações `gerarNN`/`multicedente` e repassá-las como `settings` pro `LineGenerator`, `FieldEditor` e `AssignorEditor`
 - Desabilitar "Gerar NN" enquanto não houver header (fora do Multicedente, onde o banco vem da própria linha)
 - Usar `HeaderBankRecalculator` pra recalcular automaticamente o NN dos registro1 já gerados quando o banco do header é editado
+- Expor um único ponto de escrita do estado (`setGeneratedLines`) que passa toda mudança por `HeaderTrailerOrder`, garantindo header na primeira posição e trailer na última não importa de onde a mudança veio (`LineGenerator`, `FieldEditor`, upload de arquivo, distribuição de cedentes)
 
 ---
 
@@ -160,6 +164,8 @@ Editor de campos CNAB, permite personalizar valores de cada campo.
 - Organiza campos por tipo de registro (header, registro1, registro2, etc.)
 - Usa `Accordeon` para UI expansível
 - Valida tamanho dos campos (startIndex/endIndex)
+- Pra header/trailer (que só existem uma vez no arquivo), mostra só um botão "Editar {tipo}" — sem "editar todos", "editar o último", "linha selecionada" ou "remover", que só fariam sentido com múltiplas ocorrências
+- Editar header/trailer cria a linha (via `ContentEditor.editSingleOccurrence`) se ela ainda não existir, em vez de exigir que o usuário clique em "Adicionar" antes
 
 **Dependências**:
 - `Field.jsx` - Componente individual de campo
@@ -272,7 +278,7 @@ Validador que verifica se linhas podem ser geradas conforme regras do CNAB.
 **Regras Validadas**:
 - Registros 2, 3 e 7 precisam de um registro 1 precedente
 - Um registro não pode repetir o tipo do último adicionado (exceto registro 1)
-- Header e trailer só podem existir uma vez no arquivo, em qualquer posição — `ContentFormatter` já assume isso ao só gerar header/trailer automaticamente quando nenhum dos dois existe
+- Header e trailer só podem existir uma vez no arquivo — pode ser adicionado/editado em qualquer momento, mas nunca duplicado; a posição final (header primeiro, trailer por último) é garantida à parte por `HeaderTrailerOrder`, não por este validador
 
 ---
 
@@ -286,6 +292,8 @@ Lógica para edição de conteúdo CNAB.
 - Valida alterações respeitando startIndex/endIndex
 - Mantém tamanho da linha constante
 - Aplica padding quando necessário
+- `editSingleOccurrence` edita header/trailer se a linha já existe, ou cria uma nova (defaults + campos editados) se ainda não existir — usada pelo botão único de header/trailer do `FieldEditor`
+- Exporta `updateSequentialNumbers` (recalcula `index`/`serialNumber` pela posição real no array) pra ser reaproveitada por quem mais precisar reordenar `generatedLines`
 
 ---
 
@@ -345,6 +353,18 @@ Mantém o NN dos `registro1` já gerados em sincronia com o banco do header (for
 **Funcionalidades**:
 - Regenera o `ourNumber` de toda linha `registro1` que já tinha um valor, usando o `bankCode` atual do header, via `OurNumberGenerator`
 - É acionado por `Cnab.jsx` sempre que o banco do header muda (adicionado ou editado), sem precisar de ação manual do usuário
+
+---
+
+### 📐 `CNAB Header Trailer Order`
+**Caminho**: `src/scripts/CNAB/headerTrailerOrder.js`
+
+Garante que header e trailer fiquem, respectivamente, na primeira e na última posição de `generatedLines` — independente de quando ou como foram adicionados/editados (LineGenerator, FieldEditor, upload de arquivo, distribuição de cedentes).
+
+**Funcionalidades**:
+- Move o header (se existir) pro início e o trailer (se existir) pro fim, preservando a ordem relativa das demais linhas
+- Recalcula `index`/`serialNumber` via `ContentEditor.updateSequentialNumbers` depois de reordenar
+- É a única função que `Cnab.jsx` chama antes de gravar qualquer mudança em `generatedLines`
 
 ---
 
@@ -451,6 +471,7 @@ Linhas pontilhadas indicam dependências de scripts/configurações:
 - `OurNumberGenerator` - cálculo de base + dígito verificador do NN
 - `AssignorDistributor` - distribuição de cedentes entre registro1 (Multicedente)
 - `HeaderBankRecalculator` - recálculo automático do NN quando o banco do header muda
+- `HeaderTrailerOrder` - mantém header sempre primeiro e trailer sempre último
 
 ## Diferenças entre CNAB e CSV
 
@@ -512,7 +533,8 @@ src/
         ├── contentFormatter.js           # Formatação de conteúdo
         ├── ourNumberGenerator.js         # Cálculo do Nosso Número (NN)
         ├── assignorDistributor.js        # Distribuição de cedentes (Multicedente)
-        └── headerBankRecalculator.js     # Recálculo do NN ao mudar o banco do header
+        ├── headerBankRecalculator.js     # Recálculo do NN ao mudar o banco do header
+        └── headerTrailerOrder.js         # Mantém header primeiro e trailer último
 ```
 
 ## Validação de Arquivos CNAB

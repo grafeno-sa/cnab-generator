@@ -24,7 +24,15 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
     const editedLines = ContentEditor().editAll({ generatedLines, editedFields, recordType })
     setGeneratedLines(() => [...editedLines])
   }
-  
+
+  // Header/trailer não têm um botão "adicionar" antes do editor — editar
+  // cria a linha (com os campos preenchidos) se ela ainda não existir.
+  const handleEditSingleOccurrence = () => {
+    const editedLines = ContentEditor().editSingleOccurrence({ generatedLines, editedFields, type: recordType })
+    setGeneratedLines(() => [...editedLines])
+  }
+
+
   const handleEditLast = () => {
     const editedLines = ContentEditor().editLast({ generatedLines, editedFields, recordType })
     setGeneratedLines(() => [...editedLines])
@@ -71,7 +79,7 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
             {editableTypes.map((t, index) => <option value={t} key={index}>{t}</option>)}
           </select>
           <button
-            onClick={handleEditAll}
+            onClick={handleEditSingleOccurrence}
             className="btn btn-danger">
             Editar {recordType}
           </button>

@@ -1,4 +1,21 @@
 import { last as arrayLast } from 'lodash'
+import generateLine from './lineFactory'
+
+// Recalcula index/serialNumber a partir da posição real no array. Exportada
+// à parte pra ser reaproveitada por quem precisa reordenar generatedLines
+// (ex.: manter header sempre na primeira posição e trailer na última).
+export const updateSequentialNumbers = (generatedLines) => {
+  // Create new line objects with updated index and serialNumber
+  return generatedLines.map((line, index) => {
+    const updatedLine = { ...line };
+    updatedLine.index = index;
+    // serialNumber is the line position (1-based)
+    if (updatedLine.serialNumber !== undefined) {
+      updatedLine.serialNumber = (index + 1).toString();
+    }
+    return updatedLine;
+  });
+}
 
 const ContentEditor = () => {
   const editAll = ({ generatedLines, editedFields, recordType }) => {
@@ -14,6 +31,25 @@ const ContentEditor = () => {
     })
 
     return updateSequentialNumbers(updatedLines)
+  }
+
+  // Header e trailer só existem uma vez no arquivo (LineGenerationValidator)
+  // e o editor deles não passa por um botão "adicionar" antes de editar —
+  // então editar um dos dois cria a linha (com defaults + campos editados)
+  // quando ainda não existe, em vez de não fazer nada.
+  const editSingleOccurrence = ({ generatedLines, editedFields, type, settings }) => {
+    const exists = generatedLines.some((line) => line.type === type)
+
+    if (exists) {
+      return editAll({ generatedLines, editedFields, recordType: type })
+    }
+
+    const newLine = generateLine({ type, generatedLines, settings })
+    editedFields.forEach((field) => {
+      newLine[field.name] = field.value
+    })
+
+    return updateSequentialNumbers([...generatedLines, newLine])
   }
 
   const editLast = ({ generatedLines, editedFields, recordType }) => {
@@ -68,20 +104,7 @@ const ContentEditor = () => {
     return updateSequentialNumbers(updatedLines);
   }
 
-  const updateSequentialNumbers = (generatedLines) => {
-    // Create new line objects with updated index and serialNumber
-    return generatedLines.map((line, index) => {
-      const updatedLine = { ...line };
-      updatedLine.index = index;
-      // serialNumber is the line position (1-based)
-      if (updatedLine.serialNumber !== undefined) {
-        updatedLine.serialNumber = (index + 1).toString();
-      }
-      return updatedLine;
-    });
-  }
-
-  return { editAll, editLast, deleteLast, editByIndex }
+  return { editAll, editLast, editSingleOccurrence, deleteLast, editByIndex }
 }
 
 export default ContentEditor;

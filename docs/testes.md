@@ -26,6 +26,8 @@ src/
       headerBankRecalculator.test.js   # Recálculo do NN quando o banco do header muda
       lineGenerationValidator.test.js  # Regras de sequência e unicidade de header/trailer
       cnabDefaultFlow.test.js          # Integração: gerar só registro1 e baixar (fluxo padrão)
+      contentEditor.test.js            # editSingleOccurrence (editar ou criar header/trailer)
+      headerTrailerOrder.test.js       # Header sempre primeiro, trailer sempre último
       __snapshots__/
         lineFields.test.js.snap        # Snapshots gerados automaticamente (não editar à mão)
 ```
@@ -126,6 +128,26 @@ Cobre:
 - `registro1` pode ser a primeira linha gerada, sem precisar de header
 - Múltiplas linhas de `registro1` em sequência continuam válidas
 - `ContentFormatter` injeta header e trailer automaticamente no arquivo final
+
+### `contentEditor.test.js`
+
+Testa `editSingleOccurrence`, usada pelo botão único de header/trailer em `FieldEditor`.
+
+Cobre:
+- Cria a linha (defaults + campos editados) quando ela ainda não existe
+- Edita a linha existente em vez de criar uma segunda
+- Recalcula `index`/`serialNumber` depois de criar
+
+### `headerTrailerOrder.test.js`
+
+Testa `reorderHeaderAndTrailer`, chamada pelo ponto único de escrita do estado em `Cnab.jsx` a cada mudança em `generatedLines`.
+
+Cobre:
+- Move um header/trailer existente pra primeira/última posição, de qualquer lugar do array
+- Preserva a ordem relativa das demais linhas
+- É no-op quando o array já está na ordem correta
+- Recalcula `index`/`serialNumber` depois de reordenar
+- Funciona com header e/ou trailer ausentes
 
 ## Deploy e Testes
 

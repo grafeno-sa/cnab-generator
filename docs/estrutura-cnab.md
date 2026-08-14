@@ -18,6 +18,7 @@ flowchart TD
         DownloaderJsx["Downloader.jsx"]
         LineGeneratorJsx["CNAB/LineGenerator.jsx"]
         FieldEditorJsx["CNAB/FieldEditor.jsx"]
+        AssignorEditorJsx["CNAB/AssignorEditor.jsx"]
         FieldJsx["Field.jsx"]
         ContentEditor["CNAB Content Editor"]
         LineFields["CNAB Line Fields"]
@@ -25,6 +26,9 @@ flowchart TD
         LineFactory["CNAB Line Factory"]
         LineValidator["CNAB Line Generation Validator"]
         ContentFormatter["CNAB Content Formatter"]
+        OurNumberGenerator["CNAB Our Number Generator"]
+        AssignorDistributor["CNAB Assignor Distributor"]
+        HeaderBankRecalculator["CNAB Header Bank Recalculator"]
 
         %% Sums
         Sum1["( )"]:::sum
@@ -44,6 +48,9 @@ flowchart TD
 
         FieldEditorJsx --> Sum2
 
+        CnabJsx -- "Multicedente ligado" --> AssignorEditorJsx
+        AssignorEditorJsx -- "Aplica distribuição dos cedentes entre os registro1" --> Sum2
+
         FieldJsx -.-> Sum3
         ContentEditor -.-> Sum3
         LineFields -.-> Sum3
@@ -56,12 +63,12 @@ flowchart TD
         ContentFormatter -.-> DownloaderJsx
         ContentFormatter -.-> CnabJsx
 
-        %% Dashed edges for factories/editors/etc.
-        LineFactory -.-> LineGeneratorJsx
-        LineValidator -.-> LineGeneratorJsx
-        ContentFormatter -.-> PreviewJsx
-        ContentFormatter -.-> DownloaderJsx
-        ContentFormatter -.-> CnabJsx
+        %% Geração de Nosso Número (NN)
+        OurNumberGenerator -.-> LineFields
+        AssignorDistributor -.-> AssignorEditorJsx
+        AssignorDistributor -.-> OurNumberGenerator
+        HeaderBankRecalculator -.-> CnabJsx
+        HeaderBankRecalculator -.-> OurNumberGenerator
     end
 
     %% Style for "sum" symbols (optional, for clarity)
@@ -80,6 +87,9 @@ Componente principal da página de geração CNAB. Orquestra todos os outros com
 - Coordenar componentes filhos (Preview, Cleaner, Downloader, etc.)
 - Passar dados entre componentes
 - Usar `ContentFormatter` para formatação
+- Gerenciar as configurações `gerarNN`/`multicedente` e repassá-las como `settings` pro `LineGenerator`, `FieldEditor` e `AssignorEditor`
+- Desabilitar "Gerar NN" enquanto não houver header (fora do Multicedente, onde o banco vem da própria linha)
+- Usar `HeaderBankRecalculator` pra recalcular automaticamente o NN dos registro1 já gerados quando o banco do header é editado
 
 ---
 
@@ -127,7 +137,7 @@ Componente responsável por baixar o arquivo CNAB.
 Componente para geração de novas linhas CNAB.
 
 **Funcionalidades**:
-- Interface para escolher tipo de registro (1, 2, 3, 7)
+- Interface para escolher tipo de registro (header, 1, 2, 3, 7)
 - Interface para escolher quantidade de linhas
 - Usa `LineFactory` para criar linhas
 - Usa `LineValidator` para validar antes de gerar
@@ -181,6 +191,21 @@ Componente de UI para seções expansíveis/colapsáveis.
 - Agrupa campos por tipo de registro
 - Expande/colapsa seções
 - Aceita estilos personalizados via props
+
+---
+
+### 🧾 `CNAB/AssignorEditor.jsx`
+**Caminho**: `src/components/CNAB/AssignorEditor.jsx`
+
+Editor da lista de cedentes usada no modo Multicedente. Só é renderizado quando o checkbox "Multicedente" está marcado.
+
+**Funcionalidades**:
+- Adiciona/remove cedentes (banco + conta), até `MAX_ASSIGNORS`
+- Mostra se cada cedente já está presente nas linhas geradas (calculado a partir de `generatedLines`, não de um estado próprio de "aplicado")
+- Aplica a distribuição dos cedentes entre as linhas `registro1` via `AssignorDistributor`
+
+**Dependências**:
+- `AssignorDistributor` - divide os registro1 em blocos e atribui banco/conta de cada cedente
 
 ---
 
@@ -241,13 +266,13 @@ Validador que verifica se linhas podem ser geradas conforme regras do CNAB.
 - Valida ordem de registros (registro1 deve vir antes de 2, 3, 7)
 - Valida sequência de registros
 - Verifica dependências entre tipos de registro
+- Garante que header e trailer apareçam no máximo uma vez no arquivo
 - Retorna erros se validação falhar
 
 **Regras Validadas**:
 - Registros 2, 3 e 7 precisam de um registro 1 precedente
-- Registros não podem repetir (exceto registro 1)
-- Header deve ser a primeira linha
-- Trailer deve ser a última linha
+- Um registro não pode repetir o tipo do último adicionado (exceto registro 1)
+- Header e trailer só podem existir uma vez no arquivo, em qualquer posição — `ContentFormatter` já assume isso ao só gerar header/trailer automaticamente quando nenhum dos dois existe
 
 ---
 
@@ -279,6 +304,47 @@ Formata conteúdo CNAB para exibição e download.
 - `Preview.jsx`
 - `Downloader.jsx`
 - `Cnab.jsx`
+
+---
+
+### 🔢 `CNAB Our Number Generator`
+**Caminho**: `src/scripts/CNAB/ourNumberGenerator.js`
+
+Calcula o Nosso Número (NN) de um `registro1`: base numérica + dígito verificador, replicando o algoritmo Ruby de produção (`Boletos::Vortx::Helper` / `Boletos::Bmp::Helper`, grafeno-pagamentos).
+
+**Funcionalidades**:
+- Sorteia uma base dentro da faixa numérica do banco (Vortx `310` ou BMP `274`/default)
+- Deduplica a base contra o NN das linhas `registro1` já existentes em `generatedLines`
+- Calcula o dígito verificador com o algoritmo do banco (`vortxCheckDigit`/`bmpCheckDigit`)
+
+**Usado por**:
+- `CNAB Line Fields` - `defaultValue` do campo `ourNumber`
+- `CNAB Assignor Distributor`
+- `CNAB Header Bank Recalculator`
+
+---
+
+### 📤 `CNAB Assignor Distributor`
+**Caminho**: `src/scripts/CNAB/assignorDistributor.js`
+
+Lógica por trás do botão "Aplicar distribuição multicedente" do `AssignorEditor`.
+
+**Funcionalidades**:
+- Valida a distribuição (cedente com conta preenchida, ao menos 1 `registro1` por cedente)
+- Divide as linhas `registro1` em blocos contíguos e do mesmo tamanho possível entre os cedentes, com a sobra da divisão inteira no último bloco
+- Atribui `numBancoCobrador`/`contaBeneficiario` de cada cedente ao seu bloco de linhas
+- Recalcula o `ourNumber` de cada linha redistribuída, via `OurNumberGenerator`, quando `gerarNN` está ativo
+
+---
+
+### ♻️ `CNAB Header Bank Recalculator`
+**Caminho**: `src/scripts/CNAB/headerBankRecalculator.js`
+
+Mantém o NN dos `registro1` já gerados em sincronia com o banco do header (fora do Multicedente, onde o banco vem da própria linha).
+
+**Funcionalidades**:
+- Regenera o `ourNumber` de toda linha `registro1` que já tinha um valor, usando o `bankCode` atual do header, via `OurNumberGenerator`
+- É acionado por `Cnab.jsx` sempre que o banco do header muda (adicionado ou editado), sem precisar de ação manual do usuário
 
 ---
 
@@ -348,22 +414,43 @@ Estado resetado
 Preview limpa
 ```
 
+### 5. Geração do Nosso Número (NN)
+```
+Usuário marca "Gerar NN" (habilitado só depois de existir um header, exceto no Multicedente)
+    ↓
+Sem Multicedente:                          Com Multicedente:
+LineFactory usa o banco do header      →   AssignorEditor "Aplicar distribuição multicedente"
+    ↓                                          ↓
+OurNumberGenerator calcula base+DV     →   AssignorDistributor divide os registro1 em blocos
+    ↓                                          ↓
+                                            OurNumberGenerator calcula base+DV por bloco
+
+Banco do header é editado depois (fora do Multicedente)
+    ↓
+HeaderBankRecalculator detecta a mudança
+    ↓
+Recalcula o ourNumber de todo registro1 já gerado, via OurNumberGenerator
+```
+
 ## Relacionamentos entre Componentes
 
 ### Componentes de UI (Sólidos)
 Linhas sólidas no diagrama indicam componentes React que renderizam UI:
 - `Cnab.jsx` ← componente raiz
 - `Preview.jsx`, `Cleaner.jsx`, `Downloader.jsx` ← utilidades
-- `LineGenerator.jsx`, `FieldEditor.jsx` ← geradores/editores
+- `LineGenerator.jsx`, `FieldEditor.jsx`, `AssignorEditor.jsx` ← geradores/editores
 - `Field.jsx`, `Accordeon.jsx` ← componentes reutilizáveis
 
 ### Scripts/Utilitários (Pontilhados)
 Linhas pontilhadas indicam dependências de scripts/configurações:
 - `LineFactory` - função de geração com posições fixas
-- `LineValidator` - validação de regras de sequência
+- `LineValidator` - validação de regras de sequência (inclui unicidade de header/trailer)
 - `ContentFormatter` - formatação de saída
 - `ContentEditor` - lógica de edição
 - `LineFields` - configuração de campos por registro
+- `OurNumberGenerator` - cálculo de base + dígito verificador do NN
+- `AssignorDistributor` - distribuição de cedentes entre registro1 (Multicedente)
+- `HeaderBankRecalculator` - recálculo automático do NN quando o banco do header muda
 
 ## Diferenças entre CNAB e CSV
 
@@ -414,14 +501,18 @@ src/
 │   ├── Accordeon.jsx                     # UI accordion
 │   └── CNAB/
 │       ├── LineGenerator.jsx             # Gerador de linhas
-│       └── FieldEditor.jsx               # Editor de campos
+│       ├── FieldEditor.jsx               # Editor de campos
+│       └── AssignorEditor.jsx            # Editor de cedentes (Multicedente)
 └── scripts/
     └── CNAB/
         ├── lineFactory.js                # Factory de linhas
         ├── lineFields.js                 # Configuração de campos
         ├── lineGenerationValidator.js    # Validação de geração
         ├── contentEditor.js              # Lógica de edição
-        └── contentFormatter.js           # Formatação de conteúdo
+        ├── contentFormatter.js           # Formatação de conteúdo
+        ├── ourNumberGenerator.js         # Cálculo do Nosso Número (NN)
+        ├── assignorDistributor.js        # Distribuição de cedentes (Multicedente)
+        └── headerBankRecalculator.js     # Recálculo do NN ao mudar o banco do header
 ```
 
 ## Validação de Arquivos CNAB

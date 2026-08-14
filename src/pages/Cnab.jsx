@@ -10,6 +10,7 @@ import FileUpload from '../components/CNAB/FileUpload';
 import convertFileToLines from '../scripts/CNAB/fileToLinesConverter';
 import recalculateOurNumbers from '../scripts/CNAB/headerBankRecalculator';
 import reorderHeaderAndTrailer from '../scripts/CNAB/headerTrailerOrder';
+import { headerBankCode } from '../scripts/CNAB/lineFields';
 import { Toast } from '../vendors/swal/toast';
 
 function Cnab() {
@@ -31,31 +32,20 @@ function Cnab() {
   const [assignors, setAssignors] = useState([])
   const registro1Settings = { gerarNN, multicedente }
 
-  const hasHeader = generatedLines.some((line) => line.type === 'header')
-  const gerarNNDisabled = !multicedente && !hasHeader
   const previousHeaderBankCode = useRef(null)
 
-  // Sem header, não há banco pra basear o cálculo do NN (o fallback fixo
-  // gerava números presos num banco que podia não bater com o header
-  // adicionado depois). Em Multicedente o banco vem da própria linha, então
-  // essa restrição não se aplica.
+  // Sem header, o NN usa o fallback de headerBankCode (BMP). Se um header
+  // for criado/editado depois com outro banco, os NNs já gerados ficam
+  // desatualizados (base e faixa numérica são específicas de cada banco).
+  // Recalcula automaticamente ao detectar a mudança — inclusive na transição
+  // "sem header" -> "header com banco X", não só entre dois headers
+  // diferentes — igual já é feito manualmente pro fluxo de Multicedente.
   useEffect(() => {
-    if (gerarNNDisabled && gerarNN) setGerarNN(false)
-  }, [gerarNNDisabled, gerarNN])
-
-  // Se o banco do header for editado depois que já existem registro1 com NN
-  // gerado, esses NNs ficam desatualizados (base e faixa numérica são
-  // específicas de cada banco). Recalcula automaticamente ao detectar a
-  // mudança, igual já é feito manualmente pro fluxo de Multicedente.
-  useEffect(() => {
-    const header = generatedLines.find((line) => line.type === 'header')
-    const currentBankCode = header?.bankNumber ?? null
+    const currentBankCode = headerBankCode(generatedLines)
     const previousBankCode = previousHeaderBankCode.current
     previousHeaderBankCode.current = currentBankCode
 
-    const bankChanged = previousBankCode !== null
-      && currentBankCode !== null
-      && currentBankCode !== previousBankCode
+    const bankChanged = previousBankCode !== null && currentBankCode !== previousBankCode
 
     if (!bankChanged || multicedente || !gerarNN) return
 
@@ -153,16 +143,11 @@ function Cnab() {
       <div className='row pb-2'>
         <div
           className='checkbox-panel'
-          title={
-            gerarNNDisabled
-              ? 'Adicione uma linha de header antes de gerar o NN (ou marque Multicedente, que usa o Código do Banco Cobrador de cada linha em vez do header).'
-              : 'Gera automaticamente o Nosso Número (base + dígito verificador) de cada registro1, usando o algoritmo do banco escolhido no header (ou o Código do Banco Cobrador da linha, se Multicedente estiver marcado). Desmarcado, o campo fica em branco pra edição manual.'
-          }>
+          title='Gera automaticamente o Nosso Número (base + dígito verificador) de cada registro1, usando o algoritmo do banco escolhido no header (BMP por padrão, se ainda não houver header) — ou o Código do Banco Cobrador da linha, se Multicedente estiver marcado. Desmarcado, o campo fica em branco pra edição manual.'>
           <input
             type='checkbox'
             id='gerarNN'
             checked={gerarNN}
-            disabled={gerarNNDisabled}
             onChange={(e) => setGerarNN(e.target.checked)}/>
           <label htmlFor='gerarNN'>Gerar NN</label>
         </div>

@@ -91,8 +91,7 @@ Componente principal da página de geração CNAB. Orquestra todos os outros com
 - Passar dados entre componentes
 - Usar `ContentFormatter` para formatação
 - Gerenciar as configurações `gerarNN`/`multicedente` e repassá-las como `settings` pro `LineGenerator`, `FieldEditor` e `AssignorEditor`
-- Desabilitar "Gerar NN" enquanto não houver header (fora do Multicedente, onde o banco vem da própria linha)
-- Usar `HeaderBankRecalculator` pra recalcular automaticamente o NN dos registro1 já gerados quando o banco do header é editado
+- Usar `HeaderBankRecalculator` pra recalcular automaticamente o NN dos registro1 já gerados sempre que o banco efetivo (`headerBankCode`) muda — inclusive na transição de "sem header" (fallback BMP) pra "header com outro banco"
 - Expor um único ponto de escrita do estado (`setGeneratedLines`) que passa toda mudança por `HeaderTrailerOrder`, garantindo header na primeira posição e trailer na última não importa de onde a mudança veio (`LineGenerator`, `FieldEditor`, upload de arquivo, distribuição de cedentes)
 
 ---
@@ -261,6 +260,8 @@ const fields = {
 }
 ```
 
+Exporta também `headerBankCode(generatedLines)`: banco do header, se existir, ou o fallback BMP (`274`) — usada tanto no `defaultValue` do `ourNumber` quanto por `Cnab.jsx` pra detectar quando esse banco efetivo muda.
+
 ---
 
 ### ✅ `CNAB Line Generation Validator`
@@ -351,8 +352,8 @@ Lógica por trás do botão "Aplicar distribuição multicedente" do `AssignorEd
 Mantém o NN dos `registro1` já gerados em sincronia com o banco do header (fora do Multicedente, onde o banco vem da própria linha).
 
 **Funcionalidades**:
-- Regenera o `ourNumber` de toda linha `registro1` que já tinha um valor, usando o `bankCode` atual do header, via `OurNumberGenerator`
-- É acionado por `Cnab.jsx` sempre que o banco do header muda (adicionado ou editado), sem precisar de ação manual do usuário
+- Regenera o `ourNumber` de toda linha `registro1` que já tinha um valor, usando o `bankCode` atual (via `LineFields.headerBankCode`), através de `OurNumberGenerator`
+- É acionado por `Cnab.jsx` sempre que esse banco efetivo muda — inclusive quando um header passa a existir depois de NNs já terem sido gerados com o fallback BMP — sem precisar de ação manual do usuário
 
 ---
 

@@ -5,7 +5,9 @@ import generateOurNumber from './ourNumberGenerator';
 
 const DEFAULT_BANK_CODE = '274';
 
-const headerBankCode = (generatedLines) =>
+// Exportada pra quem precisar saber, fora daqui, qual banco vai valer pro
+// próximo NN gerado (ex.: Cnab.jsx detectar quando esse valor muda).
+export const headerBankCode = (generatedLines) =>
   generatedLines.find((line) => line.type === 'header')?.bankNumber || DEFAULT_BANK_CODE;
 
 const getLineFields = (type) => {

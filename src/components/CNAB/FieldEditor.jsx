@@ -8,6 +8,7 @@ import LineSelector from "./LineSelector";
 
 const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
   const editableTypes = ['header', 'registro1', 'registro2', 'registro3', 'registro7', 'trailer']
+  const singleOccurrenceTypes = ['header', 'trailer']
   const [recordType, setRecordType] = useState('registro1')
   const [fieldOptions, setFieldOptions] = useState(getLineFields('registro1'))
   const [editedFields, setEditedFields] = useState([])
@@ -57,6 +58,27 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
   const buttons = () => {
     if (!generatedLines.length) return (<></>)
 
+    // Header e trailer só existem uma vez no arquivo (ver LineGenerationValidator),
+    // então "editar todos"/"editar o último"/"linha selecionada"/"remover" não fazem
+    // sentido pra eles: sobra um único botão que edita a própria linha existente.
+    if (singleOccurrenceTypes.includes(recordType)) {
+      return (
+        <div className="row mb-3">
+          <select
+            value={recordType}
+            onChange={selectHandler}
+            className="mr-3 flex-align-center">
+            {editableTypes.map((t, index) => <option value={t} key={index}>{t}</option>)}
+          </select>
+          <button
+            onClick={handleEditAll}
+            className="btn btn-danger">
+            Editar {recordType}
+          </button>
+        </div>
+      )
+    }
+
     return (
       <>
         <LineSelector
@@ -69,7 +91,7 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
             setEditedFields([]);
           }}
         />
-        
+
         <div className="row mb-3">
           <select
             value={recordType}

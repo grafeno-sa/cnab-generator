@@ -125,28 +125,21 @@ function Cnab() {
         <p className='bold text-center ml-2'>Registros Complementares</p>
       </div>
       <div className="row">
-        <div className='col-3'>
-          <LineGenerator
-            type='header'
-            quantity={1}
-            stateHook={{generatedLines, setGeneratedLines}}/>
-        </div>
-
-        <div className='col-3'>
+        <div className='col-4'>
           <LineGenerator
             type='registro2'
             quantity={1}
             stateHook={{generatedLines, setGeneratedLines}}/>
         </div>
 
-        <div className='col-3'>
+        <div className='col-4'>
           <LineGenerator
             type='registro3'
             quantity={1}
             stateHook={{generatedLines, setGeneratedLines}}/>
         </div>
 
-        <div className='col-3'>
+        <div className='col-4'>
           <LineGenerator
             type='registro7'
             quantity={1}

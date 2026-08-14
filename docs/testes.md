@@ -24,6 +24,8 @@ src/
       ourNumberGenerator.test.js       # Cálculo de base + dígito verificador (Vortx/BMP)
       assignorDistributor.test.js      # Distribuição de cedentes entre registro1 (Multicedente)
       headerBankRecalculator.test.js   # Recálculo do NN quando o banco do header muda
+      lineGenerationValidator.test.js  # Regras de sequência e unicidade de header/trailer
+      cnabDefaultFlow.test.js          # Integração: gerar só registro1 e baixar (fluxo padrão)
       __snapshots__/
         lineFields.test.js.snap        # Snapshots gerados automaticamente (não editar à mão)
 ```
@@ -105,6 +107,25 @@ Cobre:
 - Regenera o NN de toda linha `registro1` que já tinha um valor, usando o novo `bankCode`
 - Não mexe em linhas `registro1` sem NN nem em linhas de outros tipos
 - Evita colisão de base entre as linhas recalculadas
+
+### `lineGenerationValidator.test.js`
+
+Testa as regras de sequência de `LineGenerationValidator` (usado por `LineGenerator.jsx` antes de gerar qualquer linha).
+
+Cobre:
+- `registro2`/`registro3`/`registro7` exigem um `registro1` precedente
+- Um tipo não pode repetir logo após si mesmo, exceto `registro1`
+- Header e trailer só podem existir uma vez no arquivo, mesmo com `registro1` entre as tentativas
+- Header/trailer podem ser adicionados de novo depois que o existente é removido
+
+### `cnabDefaultFlow.test.js`
+
+Teste de integração do fluxo mais comum do gerador: adicionar só `registro1` (sem header/trailer manual) e baixar. Existe especificamente para não regredir com mudanças no validator (ex.: a unicidade de header/trailer).
+
+Cobre:
+- `registro1` pode ser a primeira linha gerada, sem precisar de header
+- Múltiplas linhas de `registro1` em sequência continuam válidas
+- `ContentFormatter` injeta header e trailer automaticamente no arquivo final
 
 ## Deploy e Testes
 

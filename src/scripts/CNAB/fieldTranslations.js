@@ -37,3 +37,9 @@ export const INFORMACAO_MULTA_OPTIONS = [
   { value: '0', label: '0 - Sem multa' },
   { value: '2', label: '2 - Multa em percentual' },
 ];
+
+// Banco (campos bankNumber e numBancoCobrador)
+export const BANK_OPTIONS = [
+  { value: '274', label: '274 - BMP' },
+  { value: '310', label: '310 - Vortx' },
+];

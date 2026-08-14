@@ -8,6 +8,7 @@ import LineSelector from "./LineSelector";
 
 const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
   const editableTypes = ['header', 'registro1', 'registro2', 'registro3', 'registro7', 'trailer']
+  const singleOccurrenceTypes = ['header', 'trailer']
   const [recordType, setRecordType] = useState('registro1')
   const [fieldOptions, setFieldOptions] = useState(getLineFields('registro1'))
   const [editedFields, setEditedFields] = useState([])
@@ -23,7 +24,15 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
     const editedLines = ContentEditor().editAll({ generatedLines, editedFields, recordType })
     setGeneratedLines(() => [...editedLines])
   }
-  
+
+  // Header/trailer não têm um botão "adicionar" antes do editor — editar
+  // cria a linha (com os campos preenchidos) se ela ainda não existir.
+  const handleEditSingleOccurrence = () => {
+    const editedLines = ContentEditor().editSingleOccurrence({ generatedLines, editedFields, type: recordType })
+    setGeneratedLines(() => [...editedLines])
+  }
+
+
   const handleEditLast = () => {
     const editedLines = ContentEditor().editLast({ generatedLines, editedFields, recordType })
     setGeneratedLines(() => [...editedLines])
@@ -57,6 +66,27 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
   const buttons = () => {
     if (!generatedLines.length) return (<></>)
 
+    // Header e trailer só existem uma vez no arquivo (ver LineGenerationValidator),
+    // então "editar todos"/"editar o último"/"linha selecionada"/"remover" não fazem
+    // sentido pra eles: sobra um único botão que edita a própria linha existente.
+    if (singleOccurrenceTypes.includes(recordType)) {
+      return (
+        <div className="row mb-3">
+          <select
+            value={recordType}
+            onChange={selectHandler}
+            className="mr-3 flex-align-center">
+            {editableTypes.map((t, index) => <option value={t} key={index}>{t}</option>)}
+          </select>
+          <button
+            onClick={handleEditSingleOccurrence}
+            className="btn btn-danger">
+            Editar {recordType}
+          </button>
+        </div>
+      )
+    }
+
     return (
       <>
         <LineSelector
@@ -69,9 +99,10 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
             setEditedFields([]);
           }}
         />
-        
+
         <div className="row mb-3">
           <select
+            value={recordType}
             onChange={selectHandler}
             className="mr-3 flex-align-center">
             {editableTypes.map((t, index) => <option value={t} key={index}>{t}</option>)}

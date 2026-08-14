@@ -16,12 +16,20 @@ npm run test -- -u    # Executa e atualiza snapshots desatualizados
 ```
 src/
   scripts/
-    replaceSubstring.test.js         # Testes da função base de escrita no buffer
+    replaceSubstring.test.js           # Testes da função base de escrita no buffer
     CNAB/
-      lineFields.test.js             # Invariantes e snapshots dos campos
-      contentFormatter.test.js       # Integração: formatação de linhas
+      lineFields.test.js               # Invariantes e snapshots dos campos
+      contentFormatter.test.js         # Integração: formatação de linhas
+      lineFactory.ourNumber.test.js    # Geração do NN (gerarNN/multicedente) na criação da linha
+      ourNumberGenerator.test.js       # Cálculo de base + dígito verificador (Vortx/BMP)
+      assignorDistributor.test.js      # Distribuição de cedentes entre registro1 (Multicedente)
+      headerBankRecalculator.test.js   # Recálculo do NN quando o banco do header muda
+      lineGenerationValidator.test.js  # Regras de sequência e unicidade de header/trailer
+      cnabDefaultFlow.test.js          # Integração: gerar só registro1 e baixar (fluxo padrão)
+      contentEditor.test.js            # editSingleOccurrence (editar ou criar header/trailer)
+      headerTrailerOrder.test.js       # Header sempre primeiro, trailer sempre último
       __snapshots__/
-        lineFields.test.js.snap      # Snapshots gerados automaticamente (não editar à mão)
+        lineFields.test.js.snap        # Snapshots gerados automaticamente (não editar à mão)
 ```
 
 ## Arquivos de Teste
@@ -65,6 +73,81 @@ Cobre:
 - Identificadores de tipo corretos (`0` = header, `1` = registro1, `9` = trailer)
 - `format()` injeta header e trailer automaticamente quando ausentes
 - Valores de campos específicos nas posições corretas (ex: `codigoInscricaoSacado` nas posições 219–220)
+
+### `lineFactory.ourNumber.test.js`
+
+Testa o `defaultValue` do campo `ourNumber` do `registro1` na criação da linha, conforme `gerarNN`/`multicedente`.
+
+Cobre:
+- Fica em branco quando `gerarNN` é `false` ou `settings` não é informado
+- Sem Multicedente, usa o banco do header (BMP por padrão, Vortx quando `header.bankNumber` é `310`)
+- Com Multicedente, usa o `numBancoCobrador` da própria linha, ignorando o banco do header
+
+### `ourNumberGenerator.test.js`
+
+Testa o cálculo de base + dígito verificador do Nosso Número, replicando o algoritmo Ruby de produção (`Boletos::Vortx::Helper` / `Boletos::Bmp::Helper`, grafeno-pagamentos) contra vetores conhecidos.
+
+Cobre:
+- `vortxCheckDigit` e `bmpCheckDigit` batem com os vetores de referência
+- A faixa numérica da base respeita o banco (`310` = Vortx, `274`/default = BMP)
+- Deduplicação de base contra `generatedLines` já existentes
+
+### `assignorDistributor.test.js`
+
+Testa a distribuição de cedentes entre as linhas `registro1` no modo Multicedente (`AssignorEditor` → "Aplicar distribuição multicedente").
+
+Cobre:
+- Validação (cedente obrigatório, conta preenchida, ao menos 1 `registro1` por cedente)
+- Blocos contíguos e do mesmo tamanho, com a sobra da divisão inteira no último bloco
+- Recalcula `ourNumber` de cada linha redistribuída quando `gerarNN` está ativo
+
+### `headerBankRecalculator.test.js`
+
+Testa o recálculo automático do `ourNumber` das linhas `registro1` já geradas quando o banco do header é alterado depois (fora do Multicedente, onde o banco vem da própria linha).
+
+Cobre:
+- Regenera o NN de toda linha `registro1` que já tinha um valor, usando o novo `bankCode`
+- Não mexe em linhas `registro1` sem NN nem em linhas de outros tipos
+- Evita colisão de base entre as linhas recalculadas
+
+### `lineGenerationValidator.test.js`
+
+Testa as regras de sequência de `LineGenerationValidator` (usado por `LineGenerator.jsx` antes de gerar qualquer linha).
+
+Cobre:
+- `registro2`/`registro3`/`registro7` exigem um `registro1` precedente
+- Um tipo não pode repetir logo após si mesmo, exceto `registro1`
+- Header e trailer só podem existir uma vez no arquivo, mesmo com `registro1` entre as tentativas
+- Header/trailer podem ser adicionados de novo depois que o existente é removido
+
+### `cnabDefaultFlow.test.js`
+
+Teste de integração do fluxo mais comum do gerador: adicionar só `registro1` (sem header/trailer manual) e baixar. Existe especificamente para não regredir com mudanças no validator (ex.: a unicidade de header/trailer).
+
+Cobre:
+- `registro1` pode ser a primeira linha gerada, sem precisar de header
+- Múltiplas linhas de `registro1` em sequência continuam válidas
+- `ContentFormatter` injeta header e trailer automaticamente no arquivo final
+
+### `contentEditor.test.js`
+
+Testa `editSingleOccurrence`, usada pelo botão único de header/trailer em `FieldEditor`.
+
+Cobre:
+- Cria a linha (defaults + campos editados) quando ela ainda não existe
+- Edita a linha existente em vez de criar uma segunda
+- Recalcula `index`/`serialNumber` depois de criar
+
+### `headerTrailerOrder.test.js`
+
+Testa `reorderHeaderAndTrailer`, chamada pelo ponto único de escrita do estado em `Cnab.jsx` a cada mudança em `generatedLines`.
+
+Cobre:
+- Move um header/trailer existente pra primeira/última posição, de qualquer lugar do array
+- Preserva a ordem relativa das demais linhas
+- É no-op quando o array já está na ordem correta
+- Recalcula `index`/`serialNumber` depois de reordenar
+- Funciona com header e/ou trailer ausentes
 
 ## Deploy e Testes
 

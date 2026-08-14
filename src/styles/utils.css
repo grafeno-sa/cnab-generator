@@ -8,6 +8,7 @@
   --muted-color-lighter: #666;
   --bg-light: #f9f9f9;
   --bg-error-light: #ffebee;
+  --success-color: #2e7d32;
   --border-color: #e0e0e0;
   --border-color-dark: #ccc;
 }
@@ -163,6 +164,69 @@
   display: flex;
   align-self: center;
   height: fit-content;
+}
+
+.checkbox-panel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin: 15px;
+  padding: 7px 15px;
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  cursor: help;
+}
+
+.checkbox-panel input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  margin: 0;
+  accent-color: var(--primary-color);
+}
+
+.checkbox-panel label {
+  cursor: pointer;
+}
+
+.assignor-editor {
+  width: 100%;
+  margin: 15px;
+  padding: 12px 16px;
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+.assignor-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.assignor-row input[type='text'] {
+  width: 120px;
+}
+
+.assignor-status {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.assignor-status.applied {
+  color: var(--success-color);
+}
+
+.assignor-status.pending {
+  color: var(--muted-color);
+}
+
+.btn-remove-assignor {
+  margin: 0;
+  padding: 4px 10px;
 }
 
 /* Empty State */

@@ -72,6 +72,7 @@ const FieldEditor = ({ generatedLines, setGeneratedLines }) => {
         
         <div className="row mb-3">
           <select
+            value={recordType}
             onChange={selectHandler}
             className="mr-3 flex-align-center">
             {editableTypes.map((t, index) => <option value={t} key={index}>{t}</option>)}
